@@ -1,0 +1,50 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Heading reveal — smooth slide-up from a mask, like the Services h1.
+   Applied automatically to h1/h2/h3 by reveal.js (no manual line breaks).
+   Whole-heading mask: the title rises into view from behind its own edge.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Pre-paint gate (set by an inline <head> script): hide eligible headings
+     before reveal.js runs so there's no flash of un-animated text. */
+  html.reveal-on h1,
+  html.reveal-on h2,
+  html.reveal-on h3 {
+    opacity: 0;
+  }
+
+  /* Headings with their own entrance / sizing logic are never gated. */
+  html.reveal-on .hero__display,
+  html.reveal-on .ct-hero__display {
+    opacity: 1;
+  }
+
+  /* Mask reveal — heading clips, inner content slides up into place. */
+  html.reveal-on .reveal--mask {
+    overflow: hidden;
+    opacity: 1;
+  }
+  html.reveal-on .reveal--mask .reveal__inner {
+    display: block;
+    transform: translateY(110%);
+    will-change: transform;
+    transition: transform 0.95s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  }
+  html.reveal-on .reveal--mask.is-revealed .reveal__inner {
+    transform: translateY(0);
+  }
+
+  /* Simple reveal — for display headings with bespoke inner layout that
+     shouldn't be wrapped (rise + fade, no DOM restructuring). */
+  html.reveal-on .reveal--simple {
+    transform: translateY(1.5rem);
+    will-change: transform, opacity;
+    transition:
+      transform 0.95s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+      opacity 0.8s ease;
+  }
+  html.reveal-on .reveal--simple.is-revealed {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
