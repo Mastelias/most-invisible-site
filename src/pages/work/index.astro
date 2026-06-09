@@ -1,0 +1,68 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getProjects } from "../../lib/sanity";
+
+const projects = await getProjects();
+const count = String(projects.length).padStart(2, "0");
+---
+
+<Layout
+  title="Selected Work — Most Invisible"
+  description="Selected projects from Most Invisible — brand identity, website design, digital products, and packaging."
+  bodyClass="page-portfolio"
+  navTheme="dark"
+  styles={["/portfolio.css?v=2"]}
+  pageScripts={["/portfolio.js?v=1"]}
+>
+  <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
+  <section class="pw-hero" data-screen-label="01 Portfolio Hero">
+    <h1 class="pw-hero__display">
+      <span class="pw-hero__display-row">
+        <span>Selected</span><span>Work</span>
+      </span>
+    </h1>
+    <div class="pw-hero__meta">
+      <p class="pw-hero__count">{count} Projects</p>
+      <p class="pw-hero__sub">Brand Identity, Website Design, Digital Products, Packaging</p>
+    </div>
+  </section>
+
+  <!-- ══ PROJECT LIST ══════════════════════════════════════════════════ -->
+  <section class="pw-list" data-screen-label="02 Project List">
+    {
+      projects.map((p, i) => {
+        const side = i % 2 === 0 ? "img-left" : "img-right";
+        const number = String(i + 1).padStart(2, "0");
+        return (
+          <a href={`/work/${p.slug}`} class={`pw-row pw-row--${side}`}>
+            <div class="pw-row__media">
+              {p.coverImage ? (
+                <div class="pw-row__img" style={`background-image:url(${p.coverImage}); background-size:cover; background-position:center;`} />
+              ) : (
+                <div class={`pw-row__img ${p.coverStyle}`} />
+              )}
+              <div class="pw-row__banner">
+                <span class="pw-row__banner-year">{p.year}</span>
+                <span class="pw-row__banner-client">{p.client}</span>
+              </div>
+            </div>
+            <div class="pw-row__content">
+              <span class="pw-row__number">{number}</span>
+              <h2 class="pw-row__title">{p.title}</h2>
+              <p class="pw-row__desc">{p.description}</p>
+              <div class="pw-row__tags">
+                {p.tags?.map((t) => <span>{t}</span>)}
+              </div>
+              <span class="pw-row__cta">
+                View project <span class="pw-row__arrow">↗</span>
+              </span>
+            </div>
+          </a>
+        );
+      })
+    }
+  </section>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <div id="site-footer"></div>
+</Layout>

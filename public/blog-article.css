@@ -1,0 +1,176 @@
+/* =========================================================================
+   Blog Article — inner article page template
+   ========================================================================= */
+
+.page-article {
+  background: var(--light);
+  color: var(--dark);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HERO — full viewport, background image with dark overlay + blur
+   ═══════════════════════════════════════════════════════════════════════ */
+.ba-hero {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 var(--page-pad) 80px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ba-hero__bg {
+  position: absolute; inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(4px);
+  transform: scale(1.05);
+}
+
+.ba-hero__overlay {
+  position: absolute; inset: 0;
+  z-index: 1;
+  background: rgba(0,0,0,0.55);
+  pointer-events: none;
+}
+
+.ba-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: heroReveal 2.2s var(--ease-out) forwards;
+  opacity: 0;
+  animation-delay: 0.1s;
+}
+
+.ba-hero__date {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+
+.ba-hero__title {
+  font-size: clamp(36px, 6vw, 80px);
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin: 0;
+}
+
+.ba-hero__excerpt {
+  font-size: 12px;
+  line-height: 1.15;
+  font-weight: var(--fw-regular);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ARTICLE BODY — centered image + rich text
+   ═══════════════════════════════════════════════════════════════════════ */
+.ba-body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 80px var(--page-pad) 96px;
+}
+
+.ba-body__cover {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 48px;
+}
+
+.ba-body__cover-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 48px;
+}
+
+.ba-body__text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ba-body__text p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--dark);
+  font-weight: var(--fw-regular);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.ba-body__text h2 {
+  font-size: var(--type-h5-size);
+  line-height: var(--lh-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 16px 0 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   READ NEXT — 4-column grid with 3 articles
+   ═══════════════════════════════════════════════════════════════════════ */
+.ba-next {
+  padding: 80px var(--page-pad) 40px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.ba-next__label {
+  display: block;
+  font-size: 12px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 40px;
+}
+
+.ba-next__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 60px 24px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .ba-hero__title {
+    font-size: clamp(32px, 8vw, 56px);
+  }
+
+  .ba-next__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .ba-hero {
+    padding: 0 var(--page-pad) 48px;
+  }
+
+  .ba-next__grid {
+    grid-template-columns: 1fr;
+  }
+}

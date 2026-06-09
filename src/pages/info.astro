@@ -1,0 +1,236 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Info — Most Invisible"
+  description="Our services: brand strategy, art direction, website design & development, SEO/AEO, AI tech design, logo identity, UI/UX, and graphic design."
+  bodyClass="page-info"
+  styles={["/info.css?v=1"]}
+>
+  <!-- ══ STATEMENT ═════════════════════════════════════════════════════ -->
+  <section class="info-statement" data-screen-label="01 Statement">
+    <p class="info-statement__lede" id="info-lede">
+      Design is meant to let brands connect with their&nbsp;users
+    </p>
+    <p class="info-statement__body" id="info-body">
+      We breakdown the step-by-step process from creating a brand identity, designing a visual language, prototyping your project to developing a responsive website.
+    </p>
+  </section>
+
+  <!-- ══ SERVICES — scroll-reveal list ═════════════════════════════════ -->
+  <section class="info-services" data-screen-label="02 Services">
+    <span class="info-services__label">Our Services</span>
+    <div class="info-services__list" id="services-list">
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="0">Brand Strategy,</span>
+        <div class="info-services__accordion" id="acc-0">
+          <p>We build a strategic plan to help you establish a consistent message across all your channels with your own tagline, campaign headline, and a brand voice.</p>
+        </div>
+      </div>
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="1">Art Direction,</span>
+        <div class="info-services__accordion" id="acc-1">
+          <p>We guide the visual tone and creative vision of your project, ensuring every element aligns with your brand's identity and communicates with clarity and impact.</p>
+        </div>
+      </div>
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="2">Website Design &amp; Dev,</span>
+        <div class="info-services__accordion" id="acc-2">
+          <p>This is the synthesis of all the creative process in order to achieve in-depth insights, visual impact, and ultimately your conversions. We create and develop your website as the digital home of your brand.</p>
+        </div>
+      </div>
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="3">SEO/AEO,</span>
+        <div class="info-services__accordion" id="acc-3">
+          <p>We modernize outdated SEO and AEO practices to boost website visibility and performance in today's search and AI landscapes. This allow us to design a clear structure to your website that the eye cannot see.</p>
+        </div>
+      </div>
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="4">AI Tech Design,</span>
+        <div class="info-services__accordion" id="acc-4">
+          <p>We enable AI to build custom apps, software, and tech systems with design expertise. Not only thinking of features and functionality, but also on how the user will interact with the technology.</p>
+        </div>
+      </div>
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="5">Logo Identity,</span>
+        <div class="info-services__accordion" id="acc-5">
+          <p>Through a collaborative and effective process, we design and develop your brand's logo compositions and its general visual identity.</p>
+        </div>
+      </div>
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="6">UI/UX Design,</span>
+        <div class="info-services__accordion" id="acc-6">
+          <p>We deliver a complete and exceptional user experience and intuitive design for you and your users through rigorous research, trials, and evaluation of users' needs and requirements.</p>
+        </div>
+      </div>
+      <div class="info-services__entry">
+        <span class="info-services__item" data-index="7">Graphic Design.</span>
+        <div class="info-services__accordion" id="acc-7">
+          <p>We help you extend your visibility in the digital space by crafting marketing materials, banners, social media graphics, and more, that allows you to build a strong and consistent online presence and brand recognition that makes you stand out.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ABOUT / FOUNDER ═══════════════════════════════════════════════ -->
+  <section class="info-about" data-screen-label="03 About">
+    <div class="info-about__grid">
+      <div class="info-about__text">
+        <h2 class="info-about__heading">Meet the designer behind Most Invisible</h2>
+        <blockquote class="info-about__quote">
+          <p class="info-about__body"><span class="info-about__q">"</span>My name is Elias and I'm the founder at Most Invisible. I have nurtured my love for storytelling and visual arts by contributing to rebrand several brand into better powerhouse identities.</p>
+          <p class="info-about__body">I'm on a mission to tell the story of businesses &amp; organizations that are doing a positive impact in the world.</p>
+          <p class="info-about__body">My passion for design, branding &amp; human psychology in general has led me to work with various brands &amp; entrepreneurs throughout different industries such as event &amp; entertainment, e-commerce, education, non-profits, physical/mental health &amp; more.</p>
+          <p class="info-about__body">Looking forward to hear about your business and the challenges to overcome.<span class="info-about__q">"</span></p>
+        </blockquote>
+        <img class="info-about__sig" src="/assets/signature-elias.svg" alt="Elias signature" />
+      </div>
+      <div class="info-about__empty"></div>
+      <div class="info-about__image">
+        <img class="info-about__photo" src="/uploads/638ace952a2fb8a6aaeff587_Elias-3-p-1600.jpg" alt="Elias, founder of Most Invisible" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <div id="site-footer"></div>
+
+  <script is:inline>
+    // Slide-up line-by-line entrance for the hero statement
+    (function () {
+      const lede = document.getElementById("info-lede");
+      const body = document.getElementById("info-body");
+      if (!lede) return;
+
+      const text = lede.textContent.trim();
+      const words = text.split(/\s+/);
+      lede.innerHTML = "";
+      lede.style.display = "inline";
+
+      const spans = words.map((w) => {
+        const s = document.createElement("span");
+        s.textContent = w + " ";
+        s.style.display = "inline";
+        lede.appendChild(s);
+        return s;
+      });
+
+      function getLines() {
+        const lines = [];
+        let currentLine = [];
+        let currentTop = null;
+        spans.forEach((s) => {
+          const top = s.getBoundingClientRect().top;
+          if (currentTop === null || Math.abs(top - currentTop) < 4) {
+            currentLine.push(s);
+            if (currentTop === null) currentTop = top;
+          } else {
+            lines.push(currentLine);
+            currentLine = [s];
+            currentTop = top;
+          }
+        });
+        if (currentLine.length) lines.push(currentLine);
+        return lines;
+      }
+
+      function wrapAndAnimate() {
+        const lines = getLines();
+        lede.innerHTML = "";
+        lede.style.display = "";
+
+        lines.forEach((lineSpans, i) => {
+          const outer = document.createElement("span");
+          outer.className = "info-statement__line";
+          const inner = document.createElement("span");
+          inner.style.display = "block";
+          inner.style.transform = "translateY(110%)";
+          inner.style.opacity = "0";
+          inner.style.animation = `infoSlideUp 1.2s var(--ease-out) forwards`;
+          inner.style.animationDelay = (0.15 + i * 0.15) + "s";
+          lineSpans.forEach((s) => inner.appendChild(s));
+          outer.appendChild(inner);
+          lede.appendChild(outer);
+        });
+
+        if (body) {
+          const delay = (0.15 + lines.length * 0.15) + "s";
+          body.style.transform = "translateY(20px)";
+          body.style.opacity = "0";
+          body.style.animation = `infoSlideUp 1.2s var(--ease-out) forwards`;
+          body.style.animationDelay = delay;
+        }
+      }
+
+      wrapAndAnimate();
+
+      let resizeTimeout;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          lede.innerHTML = "";
+          lede.style.display = "inline";
+          spans.forEach((s) => lede.appendChild(s));
+          wrapAndAnimate();
+        }, 200);
+      });
+    })();
+
+    // Scroll-reveal: items turn black when entering the viewport center
+    (function () {
+      const items = document.querySelectorAll(".info-services__item");
+      if (!items.length) return;
+
+      function updateItems() {
+        const viewH = window.innerHeight;
+        const revealStart = viewH * 0.35;
+        const revealEnd = viewH * 0.65;
+
+        items.forEach((item) => {
+          const rect = item.getBoundingClientRect();
+          const center = rect.top + rect.height / 2;
+
+          if (center >= revealStart && center <= revealEnd) {
+            item.classList.add("is-active");
+          } else if (!item.closest(".info-services__entry.is-open")) {
+            item.classList.remove("is-active");
+          }
+        });
+      }
+
+      window.addEventListener("scroll", updateItems, { passive: true });
+      updateItems();
+    })();
+
+    // Accordion: click a service to expand its description
+    (function () {
+      const entries = document.querySelectorAll(".info-services__entry");
+      let openEntry = null;
+
+      entries.forEach((entry) => {
+        const item = entry.querySelector(".info-services__item");
+        const accordion = entry.querySelector(".info-services__accordion");
+
+        item.addEventListener("click", () => {
+          if (openEntry === entry) {
+            entry.classList.remove("is-open");
+            accordion.style.maxHeight = null;
+            item.classList.remove("is-active");
+            openEntry = null;
+          } else {
+            if (openEntry) {
+              openEntry.classList.remove("is-open");
+              openEntry.querySelector(".info-services__accordion").style.maxHeight = null;
+              openEntry.querySelector(".info-services__item").classList.remove("is-active");
+            }
+            entry.classList.add("is-open");
+            accordion.style.maxHeight = accordion.scrollHeight + "px";
+            item.classList.add("is-active");
+            openEntry = entry;
+          }
+        });
+      });
+    })();
+  </script>
+</Layout>

@@ -1,0 +1,82 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getPosts, getPost } from "../../lib/sanity";
+import { toHTML } from "@portabletext/to-html";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await getPost(slug!);
+if (!post) return Astro.redirect("/blog");
+
+// Body is either Sanity Portable Text (array) or sample HTML (string).
+const bodyHtml = typeof post.body === "string" ? post.body : toHTML(post.body as any);
+
+// Read Next — up to 3 other posts, placed in cols 1, 2, 4 (skip col 3).
+const others = (await getPosts()).filter((p) => p.slug !== post.slug).slice(0, 3);
+const readNextCols = [1, 2, 4];
+---
+
+<Layout
+  title={`${post.title} — Most Invisible`}
+  description={post.excerpt}
+  bodyClass="page-article"
+  styles={["/blog.css?v=1", "/blog-article.css?v=2"]}
+  ogImage={post.coverImage ?? "/uploads/Design Template showcase.webp"}
+>
+  <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
+  <section class="ba-hero" data-screen-label="01 Article Hero">
+    {post.coverImage ? (
+      <div class="ba-hero__bg" style={`background-image:url(${post.coverImage}); background-size:cover; background-position:center;`}></div>
+    ) : (
+      <div class={`ba-hero__bg ${post.coverStyle}`}></div>
+    )}
+    <div class="ba-hero__overlay"></div>
+    <div class="ba-hero__content">
+      <span class="ba-hero__date">{post.date}</span>
+      <h1 class="ba-hero__title">{post.title}</h1>
+      {post.excerpt && <p class="ba-hero__excerpt">{post.excerpt}</p>}
+    </div>
+  </section>
+
+  <!-- ══ ARTICLE BODY ══════════════════════════════════════════════════ -->
+  <section class="ba-body" data-screen-label="02 Article Body">
+    {post.coverImage ? (
+      <div class="ba-body__cover-placeholder" style={`background-image:url(${post.coverImage}); background-size:cover; background-position:center;`}></div>
+    ) : (
+      <div class={`ba-body__cover-placeholder ${post.coverStyle}`}></div>
+    )}
+
+    <div class="ba-body__text" set:html={bodyHtml} />
+  </section>
+
+  <!-- ══ READ NEXT ═════════════════════════════════════════════════════ -->
+  {
+    others.length > 0 && (
+      <section class="ba-next" data-screen-label="03 Read Next">
+        <span class="ba-next__label">Read Next</span>
+        <div class="ba-next__grid" id="read-next-grid">
+          {others.map((p, idx) => (
+            <a class="blog-card" href={`/blog/${p.slug}`} style={`grid-column: ${readNextCols[idx]};`}>
+              <div class="blog-card__image">
+                {p.coverImage ? (
+                  <div class="blog-card__img" style={`background-image:url(${p.coverImage}); background-size:cover; background-position:center;`} />
+                ) : (
+                  <div class={`blog-card__img-placeholder ${p.coverStyle}`} />
+                )}
+              </div>
+              <span class="blog-card__year">({p.date})</span>
+              <h2 class="blog-card__title">{p.title}</h2>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <div id="site-footer"></div>
+</Layout>

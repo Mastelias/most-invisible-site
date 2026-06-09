@@ -1,0 +1,52 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getPosts } from "../../lib/sanity";
+
+const posts = await getPosts();
+
+// Recreate the original "rotating empty column" placement (4-col grid).
+// Empty column pattern per row (0-indexed): 3rd, 4th, 1st, 2nd.
+const emptyPattern = [2, 3, 0, 1];
+const placed: { post: (typeof posts)[number]; col: number; row: number }[] = [];
+let i = 0;
+let row = 0;
+while (i < posts.length) {
+  const emptyCol = emptyPattern[row % emptyPattern.length];
+  for (let col = 0; col < 4; col++) {
+    if (col === emptyCol) continue;
+    if (i >= posts.length) break;
+    placed.push({ post: posts[i], col: col + 1, row: row + 1 });
+    i++;
+  }
+  row++;
+}
+---
+
+<Layout title="Blog — Most Invisible" description="Essays on brand identity, design, and technology from the Most Invisible studio." bodyClass="page-blog" styles={["/blog.css?v=3"]}>
+  <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
+  <section class="blog-hero" data-screen-label="01 Blog Hero">
+    <h1 class="blog-hero__title">Blog Articles</h1>
+  </section>
+
+  <!-- ══ BLOG GRID ═════════════════════════════════════════════════════ -->
+  <section class="blog-grid" id="blog-grid" data-screen-label="02 Blog Grid">
+    {
+      placed.map(({ post, col, row }) => (
+        <a class="blog-card" href={`/blog/${post.slug}`} style={`grid-column: ${col}; grid-row: ${row};`}>
+          <div class="blog-card__image">
+            {post.coverImage ? (
+              <div class="blog-card__img" style={`background-image:url(${post.coverImage}); background-size:cover; background-position:center;`} />
+            ) : (
+              <div class={`blog-card__img-placeholder ${post.coverStyle}`} />
+            )}
+          </div>
+          <span class="blog-card__year">({post.date})</span>
+          <h2 class="blog-card__title">{post.title}</h2>
+        </a>
+      ))
+    }
+  </section>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <div id="site-footer"></div>
+</Layout>

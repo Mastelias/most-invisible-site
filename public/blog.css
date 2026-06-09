@@ -1,0 +1,140 @@
+/* =========================================================================
+   Blog page
+   ========================================================================= */
+
+.page-blog {
+  background: var(--light);
+  color: var(--dark);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════════════════════════ */
+.blog-hero {
+  padding: 25vh var(--page-pad) 32px;
+  text-align: center;
+}
+
+.blog-hero__title {
+  font-size: clamp(36px, 8.5vw, 160px);
+  line-height: 0.92;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 0;
+  text-align: justify;
+  text-align-last: justify;
+  animation: heroReveal 2.2s var(--ease-out) forwards;
+  opacity: 0;
+  animation-delay: 0.1s;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BLOG GRID — 4 columns, rotating empty slot
+   ═══════════════════════════════════════════════════════════════════════ */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 60px 24px;
+  padding: 0 var(--page-pad) 120px;
+}
+
+/* ─── Article card ─── */
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--dark);
+}
+
+.blog-card__image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.blog-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.4s ease;
+}
+
+.blog-card__img-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.blog-card:hover .blog-card__img,
+.blog-card:hover .blog-card__img-placeholder {
+  filter: brightness(0.7);
+}
+
+.blog-card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.blog-card__overlay-title {
+  font-size: clamp(20px, 2.5vw, 36px);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--light);
+  text-align: center;
+  line-height: 1;
+}
+
+.blog-card__year {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.45);
+}
+
+.blog-card__title {
+  font-size: var(--type-h6-size);
+  line-height: var(--lh-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Cards are placed into explicit columns/rows inline by JS for the
+     desktop "rotating empty slot" pattern. Below the 4-col layout that
+     pattern no longer applies, so let cards flow naturally — !important
+     is required to beat the inline grid-column/grid-row styles. */
+  .blog-card {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-hero {
+    padding: 15vh var(--page-pad) 48px;
+  }
+}

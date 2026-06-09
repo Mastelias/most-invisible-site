@@ -1,0 +1,115 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getProjects, getProject } from "../../lib/sanity";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = await getProject(slug!);
+if (!project) return Astro.redirect("/work");
+
+// Next project = the following project by order, wrapping around.
+const all = await getProjects();
+const idx = all.findIndex((p) => p.slug === project.slug);
+const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
+---
+
+<Layout
+  title={`${project.title} — Most Invisible`}
+  description={project.description}
+  bodyClass="page-case"
+  styles={["/case-study.css?v=2"]}
+  ogImage={project.coverImage ?? "/uploads/Design Template showcase.webp"}
+>
+  <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
+  <section class="cs-hero" data-screen-label="01 Case Hero">
+    <div class="cs-hero__top">
+      <h1 class="cs-hero__title">{project.title}</h1>
+      <a href="/work" class="cs-hero__back">◄ Back</a>
+    </div>
+    <div class="cs-hero__image">
+      {project.coverImage ? (
+        <div class="cs-hero__img-placeholder" style={`background-image:url(${project.coverImage}); background-size:cover; background-position:center;`}></div>
+      ) : (
+        <div class={`cs-hero__img-placeholder ${project.coverStyle}`}></div>
+      )}
+    </div>
+  </section>
+
+  <!-- ══ OVERVIEW ══════════════════════════════════════════════════════ -->
+  <section class="cs-overview" data-screen-label="02 Overview">
+    <div class="cs-overview__meta">
+      {project.client && (
+        <div class="cs-overview__meta-item">
+          <span class="cs-overview__meta-label">Client</span>
+          <span class="cs-overview__meta-value">{project.client}</span>
+        </div>
+      )}
+      {project.year && (
+        <div class="cs-overview__meta-item">
+          <span class="cs-overview__meta-label">Year</span>
+          <span class="cs-overview__meta-value">{project.year}</span>
+        </div>
+      )}
+      {project.role && (
+        <div class="cs-overview__meta-item">
+          <span class="cs-overview__meta-label">Role</span>
+          <span class="cs-overview__meta-value">{project.role}</span>
+        </div>
+      )}
+      {project.industry && (
+        <div class="cs-overview__meta-item">
+          <span class="cs-overview__meta-label">Industry</span>
+          <span class="cs-overview__meta-value">{project.industry}</span>
+        </div>
+      )}
+    </div>
+    <p class="cs-overview__desc">{project.description}</p>
+    <div class="cs-overview__rule"></div>
+  </section>
+
+  <!-- ══ GALLERY ═══════════════════════════════════════════════════════ -->
+  {
+    project.gallery && project.gallery.length > 0 && (
+      <section class="cs-gallery" data-screen-label="03 Gallery">
+        {project.gallery.map((g) => (
+          <div class={`cs-gallery__item cs-gallery__item--${g.size} cs-gallery__item--center`}>
+            {g.url ? (
+              <div class={`cs-gallery__img cs-gallery__img--${g.orientation}`} style={`background-image:url(${g.url}); background-size:cover; background-position:center;`} />
+            ) : (
+              <div class={`cs-gallery__img cs-gallery__img--${g.orientation} ${g.mesh ?? "mesh-graphite"}`} />
+            )}
+          </div>
+        ))}
+      </section>
+    )
+  }
+
+  <!-- ══ NEXT PROJECT ══════════════════════════════════════════════════ -->
+  {
+    next && (
+      <a href={`/work/${next.slug}`} class="cs-next" data-screen-label="04 Next Project">
+        <div class="cs-next__content">
+          <span class="cs-next__label">Next Project</span>
+          <h2 class="cs-next__title">{next.title}</h2>
+          <span class="cs-next__cta">
+            View project <span class="cs-next__arrow">↗</span>
+          </span>
+        </div>
+        <div class="cs-next__image">
+          {next.coverImage ? (
+            <div class="cs-next__img-placeholder" style={`background-image:url(${next.coverImage}); background-size:cover; background-position:center;`} />
+          ) : (
+            <div class={`cs-next__img-placeholder ${next.coverStyle}`} />
+          )}
+        </div>
+      </a>
+    )
+  }
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <div id="site-footer"></div>
+</Layout>

@@ -1,0 +1,268 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Set PUBLIC_FORMSPREE_ID in .env to enable real submissions (see README).
+// Without it, the form gracefully falls back to opening the user's mail client.
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID as string | undefined;
+const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : undefined;
+---
+
+<Layout
+  title="Contact — Most Invisible"
+  description="Get in touch with Most Invisible — a design studio in Montréal. New projects, partnerships, and collaborations welcome."
+  bodyClass="page-contact"
+  navTheme="dark"
+  styles={["/contact.css?v=3"]}
+>
+  <!-- ══ HERO — full-viewport email display ═══════════════════════════ -->
+  <section class="ct-hero" data-screen-label="01 Contact Hero">
+    <video class="ct-hero__video" autoplay muted loop playsinline aria-hidden="true" preload="none" data-src="/hero-contact.webm"></video>
+    <div class="ct-hero__overlay" aria-hidden="true"></div>
+    <div class="ct-hero__vignette" aria-hidden="true"></div>
+
+    <!-- Giant email + location -->
+    <div class="ct-hero__email-block">
+      <div class="ct-hero__location">
+        <span class="ct-hero__tz">(EST)</span>
+        <span class="ct-hero__city">Montréal, CA</span>
+      </div>
+      <h1 class="ct-hero__display">
+        <span class="ct-hero__display-row">Contact@</span>
+        <span class="ct-hero__display-row">MostInvisible.com</span>
+      </h1>
+      <button class="ct-hero__copy" id="copy-email" aria-label="Copy email address">
+        Copy Email
+      </button>
+    </div>
+
+    <!-- Bottom bar — branding left, social links right -->
+    <div class="ct-hero__bottom">
+      <div class="ct-hero__brand">
+        <span class="ct-hero__brand-name">Most Invisible®</span>
+        <span class="ct-hero__brand-handle">@mostinvisible</span>
+      </div>
+      <div class="ct-hero__social">
+        <a href="#" class="ct-hero__social-link">(IG)</a>
+        <a href="#" class="ct-hero__social-link">(LI)</a>
+        <a href="#" class="ct-hero__social-link">(BE)</a>
+        <a href="#" class="ct-hero__social-link">(ETSY)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ REACH US — light section with form ═══════════════════════════ -->
+  <section class="ct-reach" data-screen-label="02 Reach Us" data-nav-theme="light">
+    <!-- Top: heading + info row -->
+    <div class="ct-reach__top">
+      <h2 class="ct-reach__title">Reach Out.</h2>
+      <div class="ct-reach__info">
+        <p class="ct-reach__body">
+          We're always open to new collaborations and conversations. Whether you have a project in mind, a question about our work, or just want to say hello — we'd love to hear from you.
+        </p>
+        <div class="ct-reach__address">
+          <span>Montréal, Québec</span>
+          <span>Canada</span>
+        </div>
+        <div class="ct-reach__links">
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Are.na</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: form left + image right -->
+    <div class="ct-reach__bottom">
+      <div class="ct-reach__form-col">
+        <form class="ct-form" id="contact-form" method="POST" action={formAction} data-formspree={formspreeId ?? ""}>
+          <div class="ct-form__group">
+            <label class="ct-form__label" for="f-name">Your Name</label>
+            <input class="ct-form__input" type="text" id="f-name" name="name" placeholder="Full name" required />
+          </div>
+          <div class="ct-form__group">
+            <label class="ct-form__label" for="f-email">Email Address</label>
+            <input class="ct-form__input" type="email" id="f-email" name="email" placeholder="you@company.com" required />
+          </div>
+          <div class="ct-form__group">
+            <label class="ct-form__label" for="f-subject">Subject</label>
+            <select class="ct-form__input ct-form__select" id="f-subject" name="subject">
+              <option value="" disabled selected>Select an inquiry type</option>
+              <option value="general">General Inquiry</option>
+              <option value="project">New Project</option>
+              <option value="business">Business / Partnership</option>
+              <option value="careers">Careers</option>
+            </select>
+          </div>
+          <div class="ct-form__group">
+            <label class="ct-form__label" for="f-message">Message</label>
+            <textarea class="ct-form__input ct-form__textarea" id="f-message" name="message" placeholder="Tell us about your project or inquiry..." rows="5" required></textarea>
+          </div>
+          <button class="ct-form__submit" type="submit">Send Message <span class="ct-form__submit-arrow">↗</span></button>
+        </form>
+      </div>
+      <div class="ct-reach__img-col">
+        <video class="ct-reach__img ct-reach__video" autoplay muted loop playsinline aria-hidden="true" preload="none" data-src="/showcase.webm?v=2"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <div id="site-footer"></div>
+
+  <script is:inline>
+    // Copy email to clipboard — triggered by both the button and the giant title
+    (function () {
+      const btn = document.getElementById("copy-email");
+      const display = document.querySelector(".ct-hero__display");
+      if (!btn) return;
+
+      function copyEmail() {
+        navigator.clipboard.writeText("contact@mostinvisible.com").then(() => {
+          const orig = btn.textContent;
+          btn.textContent = "Copied!";
+          setTimeout(() => { btn.textContent = orig; }, 2000);
+        });
+      }
+
+      btn.addEventListener("click", copyEmail);
+
+      if (display) {
+        display.style.cursor = "pointer";
+        display.setAttribute("role", "button");
+        display.setAttribute("tabindex", "0");
+        display.setAttribute("aria-label", "Copy email address");
+        display.addEventListener("click", copyEmail);
+        display.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            copyEmail();
+          }
+        });
+      }
+    })();
+
+    // Contact form — submit to Formspree if configured, else fall back to mailto
+    (function () {
+      const form = document.getElementById("contact-form");
+      if (!form) return;
+      const submitBtn = form.querySelector(".ct-form__submit");
+      const formspreeId = form.dataset.formspree;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+
+        if (formspreeId) {
+          const original = submitBtn.innerHTML;
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Sending…";
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              body: data,
+              headers: { Accept: "application/json" },
+            });
+            if (res.ok) {
+              form.reset();
+              submitBtn.textContent = "Message sent ✓";
+              setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = original;
+              }, 4000);
+            } else {
+              throw new Error("Request failed");
+            }
+          } catch (err) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = original;
+            alert("Something went wrong. Please email contact@mostinvisible.com directly.");
+          }
+        } else {
+          // No backend configured yet — open the user's mail client as a fallback.
+          const name = encodeURIComponent(data.get("name") || "");
+          const email = encodeURIComponent(data.get("email") || "");
+          const subject = encodeURIComponent("New inquiry: " + (data.get("subject") || "General"));
+          const body = encodeURIComponent(
+            "Name: " + (data.get("name") || "") +
+            "\nEmail: " + (data.get("email") || "") +
+            "\n\n" + (data.get("message") || "")
+          );
+          window.location.href =
+            "mailto:contact@mostinvisible.com?subject=" + subject + "&body=" + body;
+        }
+      });
+    })();
+
+    // Lazy-load videos — only fetch the source once it scrolls near the viewport
+    (function () {
+      const videos = document.querySelectorAll("video[preload='none']");
+      if (!videos.length) return;
+
+      function loadVideo(video) {
+        if (video.dataset.loaded) return;
+        video.dataset.loaded = "1";
+        if (video.dataset.src) {
+          video.src = video.dataset.src;
+          video.removeAttribute("data-src");
+        }
+        video.load();
+        video.play().catch(() => {});
+      }
+
+      if (!("IntersectionObserver" in window)) {
+        videos.forEach(loadVideo);
+        return;
+      }
+
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadVideo(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: "200px" });
+
+      videos.forEach((v) => io.observe(v));
+    })();
+
+    // Fit "MostInvisible.com" to 100% container width, scale "Contact@" proportionally
+    (function () {
+      const display = document.querySelector(".ct-hero__display");
+      if (!display) return;
+      const rows = display.querySelectorAll(".ct-hero__display-row");
+      if (rows.length < 2) return;
+
+      const line1 = rows[0];
+      const line2 = rows[1];
+
+      function fitText() {
+        line2.style.fontSize = "";
+        line1.style.fontSize = "";
+
+        const containerW = display.clientWidth;
+        if (containerW <= 0) return;
+        const targetW = containerW * 0.985;
+
+        let lo = 10, hi = 400, best = 40;
+        for (let i = 0; i < 30; i++) {
+          const mid = (lo + hi) / 2;
+          line2.style.fontSize = mid + "px";
+          const textW = line2.scrollWidth;
+          if (textW <= targetW) {
+            best = mid;
+            lo = mid;
+          } else {
+            hi = mid;
+          }
+        }
+
+        line2.style.fontSize = best + "px";
+        line1.style.fontSize = best + "px";
+      }
+
+      fitText();
+      window.addEventListener("resize", fitText);
+    })();
+  </script>
+</Layout>

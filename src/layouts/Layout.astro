@@ -1,0 +1,62 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  bodyClass?: string;
+  navTheme?: string;
+  styles?: string[];
+  pageScripts?: string[];
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = "Most Invisible® is a design studio based in Montréal, specializing in brand identity, website design, and digital products.",
+  bodyClass = "",
+  navTheme,
+  styles = [],
+  pageScripts = [],
+  ogImage = "/uploads/Design Template showcase.webp",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site ?? Astro.url.origin).href} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Global stylesheets (shared by every page) -->
+    <link rel="stylesheet" href="/colors_and_type.css?v=36" />
+    <link rel="stylesheet" href="/site.css?v=45" />
+    {styles.map((href) => <link rel="stylesheet" href={href} />)}
+  </head>
+
+  <body class={bodyClass}>
+    <!-- Shared navbar (injected by navbar.js) -->
+    <div id="site-navbar" data-theme={navTheme}></div>
+
+    <slot />
+
+    <!-- Shared scripts on every page -->
+    <script src="/navbar.js?v=2" is:inline></script>
+    <script src="/footer.js" is:inline></script>
+    <script src="/site.js" is:inline></script>
+    {pageScripts.map((src) => <script src={src} is:inline></script>)}
+  </body>
+</html>

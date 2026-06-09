@@ -1,0 +1,26 @@
+{
+  "name": "most-invisible-site",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/sitemap": "^3.7.3",
+    "@portabletext/to-html": "^5.0.2",
+    "@sanity/astro": "^3.4.0",
+    "@sanity/client": "^7.22.1",
+    "@sanity/vision": "^5.30.0",
+    "astro": "^6.4.4",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "sanity": "^5.30.0"
+  }
+}

@@ -1,0 +1,223 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getFeaturedProjects } from "../lib/sanity";
+
+// Featured projects drive the home portfolio grid.
+const featured = await getFeaturedProjects();
+
+// Aspect ratios, side, and mesh fallbacks cycle to preserve the original rhythm.
+const gridMeta = [
+  { side: "left", row: 1, aspect: "4/3", mesh: "mesh-obsidian" },
+  { side: "right", row: 1, aspect: "3/4", mesh: "mesh-bone" },
+  { side: "left", row: 2, aspect: "16/9", mesh: "mesh-graphite" },
+  { side: "right", row: 2, aspect: "4/5", mesh: "mesh-midnight" },
+  { side: "left", row: 3, aspect: "3/2", mesh: "mesh-ember" },
+  { side: "right", row: 3, aspect: "1/1", mesh: "mesh-graphite" },
+];
+---
+
+<Layout title="Most Invisible — Design studio, Montreal" navTheme="dark">
+  <!-- ══ HERO ════════════════════════════════════════════════════════ -->
+  <section class="hero" id="top" data-screen-label="01 Hero">
+    <video class="hero__video" autoplay muted loop playsinline aria-hidden="true">
+      <source src="/uploads/Most Invisible Hero Footage - Video.webm" type="video/webm" />
+    </video>
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__vignette" aria-hidden="true"></div>
+
+    <!-- Meta cluster — left-aligned, xsmall -->
+    <div class="hero__meta">
+      <p class="hero__meta-value">Brand identity + Website design + B2B + Tech Design + Graphic Design</p>
+    </div>
+
+    <!-- Recent work card — top-right, under the nav -->
+    <a class="hero__recent" href="#work" aria-label="Recent work — Osmo">
+      <div class="hero__recent-media mesh-obsidian"></div>
+      <div class="hero__recent-meta">
+        <span class="hero__recent-top">Recent work</span>
+        <div class="hero__recent-row">
+          <span class="hero__recent-title">Osmo</span>
+          <span class="hero__recent-arrow" aria-hidden="true">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Display heading — justified across 100vw at the bottom -->
+    <h1 class="hero__display" style="font-weight: 500">
+      <span class="hero__display-row">
+        <span>The</span><span>Design</span><span>House</span>
+      </span>
+      <span class="hero__display-row">
+        <span>Brands</span><span>Trust</span>
+      </span>
+    </h1>
+  </section>
+
+  <!-- ══ CONTENT WRAPPER — sits above the sticky hero ══════════════════ -->
+  <div class="content-above-hero">
+    <!-- ══ WORK — featured ═══════════════════════════════════════════════ -->
+    <section class="work" id="work" data-screen-label="03 Work" data-nav-theme="light">
+      <header class="work__head">
+        <p class="work__lede" id="work-lede">
+          Most Invisible® is a design studio based in Montréal, specializing in brand identity, website design, and digital products, working collaboratively with specialists across multiple&nbsp;disciplines.
+        </p>
+        <span class="work__sub">A Digital-First Mindset</span>
+      </header>
+    </section>
+
+    <!-- ══ PORTFOLIO GRID ════════════════════════════════════════════════ -->
+    <section class="portfolio" data-screen-label="03b Portfolio" data-nav-theme="light">
+      <h2 class="portfolio__title">
+        <span class="portfolio__title-row">
+          <span>The</span> <span>Work</span> <span>We</span>
+        </span>
+        <span class="portfolio__title-row">
+          <span>Love</span> <span>Doing</span>
+        </span>
+      </h2>
+
+      <div class="portfolio__grid">
+        {
+          featured.map((p, i) => {
+            const meta = gridMeta[i % gridMeta.length];
+            return (
+              <a class={`portfolio__item portfolio__item--${meta.side}`} href={`/work/${p.slug}`} style={`grid-row: ${meta.row};`}>
+                <span class="portfolio__label">{p.title} — {p.year}</span>
+                {p.coverImage ? (
+                  <div class="portfolio__img" style={`aspect-ratio: ${meta.aspect}; background-image:url(${p.coverImage}); background-size:cover; background-position:center;`} />
+                ) : (
+                  <div class={`portfolio__img ${p.coverStyle ?? meta.mesh}`} style={`aspect-ratio: ${meta.aspect};`} />
+                )}
+              </a>
+            );
+          })
+        }
+      </div>
+    </section>
+
+    <!-- ══ BIG NAME block ═════════════════════════════════════════════════ -->
+    <section class="process" id="studio" data-screen-label="04 Process">
+      <div class="process__top">
+        <div class="process__top-left">
+          <h2 class="process__title">The Creative Process.</h2>
+        </div>
+        <div class="process__top-mid">
+          <p class="process__copy">
+            The user-first approach lets us identify the user's needs &amp; conceptualize web solutions in a defined timeframe. We plan, design &amp; develop the concepts. You can repeat the process for any future project.
+          </p>
+        </div>
+        <div class="process__top-right"></div>
+      </div>
+
+      <div class="process__grid">
+        <div class="process__cell">
+          <span class="process__cell-label">01 Strategy</span>
+          <div class="process__card">
+            <img class="process__img" src="/uploads/Strategy.webp" alt="Strategy" />
+            <div class="process__overlay">
+              <p class="process__overlay-text">The strategy phase allows us to plan ahead &amp; determine what problem we're solving.</p>
+            </div>
+          </div>
+        </div>
+        <div class="process__cell process__cell--empty"></div>
+        <div class="process__cell">
+          <span class="process__cell-label">02 Design</span>
+          <div class="process__card">
+            <img class="process__img" src="/uploads/Design-2.webp" alt="Design" />
+            <div class="process__overlay">
+              <p class="process__overlay-text">This is where we create concepts &amp; explore different ways to communicate with your user.</p>
+            </div>
+          </div>
+        </div>
+        <div class="process__cell">
+          <span class="process__cell-label">03 Development</span>
+          <div class="process__card">
+            <img class="process__img" src="/uploads/Development.webp" alt="Development" />
+            <div class="process__overlay">
+              <p class="process__overlay-text">Once the final concept is approved, we develop the idea into its final form &amp; test the result.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ LOGO CAROUSEL ═══════════════════════════════════════════════── -->
+    <section class="logos" data-screen-label="04b Logos">
+      <div class="logos__track">
+        <div class="logos__slide">
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Horizontal Full W_SVG.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Rameki Full Logo White_SVG.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Fondation-dynastie.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Centre lasallien.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Artboard 1 copyMHN-Logo.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo logos__logo--lg" src="/uploads/Artboard 1 copy 3mylife-logo-no-icon.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo logos__logo--lg" src="/uploads/Tom wang.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo logos__logo--nofilter" src="/uploads/White-10XBNB-Logo.webp" alt="" /></div>
+        </div>
+        <div class="logos__slide" aria-hidden="true">
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Horizontal Full W_SVG.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Rameki Full Logo White_SVG.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Fondation-dynastie.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Centre lasallien.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo" src="/uploads/Artboard 1 copyMHN-Logo.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo logos__logo--lg" src="/uploads/Artboard 1 copy 3mylife-logo-no-icon.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo logos__logo--lg" src="/uploads/Tom wang.svg" alt="" /></div>
+          <div class="logos__item"><img class="logos__logo logos__logo--nofilter" src="/uploads/White-10XBNB-Logo.webp" alt="" /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ABOUT — section 5 ═════════════════════════════════════════════ -->
+    <section class="about" id="services" data-screen-label="05 About">
+      <div class="about__grid">
+        <div class="about__col-label">
+          <span class="about__section-label">The Studio</span>
+        </div>
+        <div class="about__col-image">
+          <img class="about__photo" src="/uploads/Art Technology experience.webp" alt="Art, technology, experience" />
+        </div>
+        <div class="about__col-empty"></div>
+        <div class="about__col-content">
+          <h2 class="about__heading">Art, Technology, Experience.</h2>
+          <p class="about__body">
+            Our approach sits where creativity and technical imagination meet. We explore emerging technologies with a practical, artistic eye, shaping them into experiences that feel human and memorable.
+          </p>
+          <p class="about__body">
+            Our curiosity is what keeps our work moving forward. It pushes us to stay close to new ideas, new tools and new ways of seeing. It keeps our aesthetics evolving and our technical approach sharp. It's the energy that ensures every project feels considered and ready for the world it's going into.
+          </p>
+          <div class="about__cta-row">
+            <span class="about__cta-label">The Studio</span>
+            <a class="about__cta" href="#contact">→</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Capabilities sub-section -->
+      <div class="capabilities__intro">
+        <p class="capabilities__lead">
+          Everything we create is built in close collaboration with our clients and agency partners, working together to bring ideas to life with clarity and intention.
+        </p>
+      </div>
+      <div class="capabilities__grid">
+        <div class="capabilities__col-image">
+          <img class="capabilities__img" src="/uploads/Design Template showcase.webp" alt="Design template showcase" />
+        </div>
+        <div class="capabilities__col-title">
+          <span class="capabilities__label">Capabilities</span>
+        </div>
+        <div class="capabilities__col-list">
+          <ul class="capabilities__list">
+            <li><span>UI/UX DESIGN &amp; DEVELOPMENT</span><span class="capabilities__num">[ 01 ]</span></li>
+            <li><span>B2B IDENTITY DESIGN &amp; REBRANDING</span><span class="capabilities__num">[ 02 ]</span></li>
+            <li><span>SEO &amp; AEO OPTIMIZATION</span><span class="capabilities__num">[ 03 ]</span></li>
+            <li><span>CONTENT GRAPHIC DESIGN</span><span class="capabilities__num">[ 04 ]</span></li>
+            <li><span>Website &amp; App Experience</span><span class="capabilities__num">[ 05 ]</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer — shared component -->
+    <div id="site-footer"></div>
+  </div><!-- /.content-above-hero -->
+</Layout>

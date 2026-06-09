@@ -1,0 +1,252 @@
+/* =========================================================================
+   Info page
+   ========================================================================= */
+
+/* ─── Page base ─── */
+.page-info {
+  background: var(--light);
+  color: var(--dark);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STATEMENT — large opening text, similar to homepage work lede
+   ═══════════════════════════════════════════════════════════════════════ */
+.info-statement {
+  padding: 25vh var(--page-pad) 120px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.info-statement__lede {
+  font-size: clamp(36px, 8.5vw, 160px);
+  line-height: 0.92;
+  max-width: none;
+  color: var(--dark);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  margin: 0;
+}
+
+/* ─── Slide-up line animation ─── */
+@keyframes infoSlideUp {
+  0% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.info-statement__line {
+  display: block;
+  overflow: hidden;
+  line-height: 0.92;
+}
+
+.info-statement__body {
+  font-size: 12px;
+  line-height: 1.15;
+  color: rgba(0,0,0,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  max-width: 42ch;
+  margin: 32px 0 0;
+}
+
+.info-statement__sub {
+  font-size: var(--type-p-md-size);
+  line-height: var(--type-p-md-line);
+  color: rgba(0,0,0,0.45);
+  font-weight: var(--fw-regular);
+  font-style: italic;
+  margin-top: 24px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SERVICES — scroll-reveal list, grey to black
+   ═══════════════════════════════════════════════════════════════════════ */
+.info-services {
+  padding: 96px var(--page-pad) 160px;
+  background: var(--light);
+}
+
+.info-services__label {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 64px;
+}
+
+.info-services__list {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+
+.info-services__item {
+  font-size: clamp(36px, 7vw, 100px);
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.15);
+  transition: color 0.4s ease;
+  display: inline;
+  cursor: pointer;
+}
+
+.info-services__item.is-active {
+  color: var(--dark);
+}
+
+.info-services__item:hover {
+  color: var(--dark);
+}
+
+/* ─── Accordion entries ─── */
+.info-services__entry {
+  text-align: center;
+}
+
+.info-services__accordion {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.info-services__accordion p {
+  font-size: 12px;
+  line-height: 1.15;
+  color: rgba(0,0,0,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: var(--fw-regular);
+  max-width: 42ch;
+  margin: 16px auto 24px;
+  text-wrap: pretty;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ABOUT / FOUNDER — left text, right image
+   ═══════════════════════════════════════════════════════════════════════ */
+.info-about {
+  padding: 96px var(--page-pad) 120px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.info-about__grid {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr 0.7fr;
+  gap: 40px;
+  align-items: end;
+}
+
+.info-about__text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-about__heading {
+  font-size: clamp(28px, 4vw, 64px);
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 0;
+}
+
+.info-about__quote {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-about__q {
+  font-weight: var(--fw-bold);
+  font-size: 1.4em;
+}
+
+.info-about__body {
+  font-size: 12px;
+  line-height: 1.15;
+  color: rgba(0,0,0,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: var(--fw-regular);
+  max-width: 52ch;
+  margin: 0;
+}
+
+.info-about__sig {
+  width: 100px;
+  height: auto;
+  margin: 16px 0 0;
+}
+
+.info-about__photo {
+  width: 100%;
+  max-width: 360px;
+  display: block;
+  border-radius: 0;
+}
+
+.info-about__image {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.info-about__img-placeholder,
+.info-about__photo {
+  border-radius: 0;
+}
+
+@media (max-width: 900px) {
+  .info-about__grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .info-about__image {
+    order: -1;
+  }
+
+  .info-about__img-placeholder {
+    max-width: 100%;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .info-statement {
+    padding: 20vh var(--page-pad) 80px;
+  }
+
+  .info-services__item {
+    font-size: clamp(28px, 8vw, 60px);
+  }
+}
+
+@media (max-width: 600px) {
+  .info-statement {
+    padding: 15vh var(--page-pad) 64px;
+  }
+}

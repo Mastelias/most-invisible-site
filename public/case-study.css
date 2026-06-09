@@ -1,0 +1,410 @@
+/* =========================================================================
+   Case Study — individual project page template
+   ========================================================================= */
+
+/* ─── Page base ─── */
+.page-case {
+  background: var(--light);
+  color: var(--dark);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HERO — light header with title + full-bleed image
+   ═══════════════════════════════════════════════════════════════════════ */
+.cs-hero {
+  padding: 25vh var(--page-pad) 0;
+}
+
+.cs-hero__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  max-width: 1400px;
+  margin: 0 auto 32px;
+}
+
+.cs-hero__title {
+  font-size: clamp(48px, 8vw, 140px);
+  line-height: 0.92;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 0;
+}
+
+.cs-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4.5px;
+  font-size: 7.5px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark);
+  text-decoration: none;
+  border: 1px solid rgba(0,0,0,0.2);
+  padding: 6px 10.5px;
+  flex-shrink: 0;
+  transition: border-color var(--motion-base) var(--ease-standard);
+}
+
+.cs-hero__back:hover {
+  border-color: var(--dark);
+  opacity: 1;
+}
+
+/* Hero entrance animation */
+.cs-hero__title,
+.cs-hero__back {
+  animation: heroReveal 2.2s var(--ease-out) forwards;
+  opacity: 0;
+  will-change: opacity, filter;
+}
+.cs-hero__title { animation-delay: 0.1s; }
+.cs-hero__back  { animation-delay: 0.3s; }
+
+/* Full-bleed hero image — edge to edge */
+.cs-hero__image {
+  width: 100vw;
+  margin-left: calc(-1 * var(--page-pad));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  animation: heroReveal 2.2s var(--ease-out) forwards;
+  opacity: 0;
+  animation-delay: 0.2s;
+}
+
+.cs-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cs-hero__img-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PROJECT OVERVIEW — centered single column
+   ═══════════════════════════════════════════════════════════════════════ */
+.cs-overview {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 96px var(--page-pad);
+  text-align: center;
+}
+
+.cs-overview__meta {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.cs-overview__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cs-overview__meta-label {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+}
+
+.cs-overview__meta-value {
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--dark);
+}
+
+.cs-overview__desc {
+  font-size: clamp(22px, 3vw, 36px);
+  line-height: 1.2;
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.02em;
+  color: var(--dark);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.cs-overview__rule {
+  width: 40px;
+  height: 1px;
+  background: rgba(0,0,0,0.15);
+  margin: 40px auto 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   GALLERY — varied widths, centered, organic rhythm
+   ═══════════════════════════════════════════════════════════════════════ */
+.cs-gallery {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 0 var(--page-pad) 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* ─── Width variants ─── */
+.cs-gallery__item {
+  overflow: hidden;
+}
+
+.cs-gallery__item--full {
+  width: 100%;
+}
+
+.cs-gallery__item--large {
+  width: 85%;
+}
+
+.cs-gallery__item--medium {
+  width: 70%;
+}
+
+.cs-gallery__item--small {
+  width: 55%;
+}
+
+/* ─── Alignment variants ─── */
+.cs-gallery__item--left {
+  align-self: flex-start;
+}
+
+.cs-gallery__item--right {
+  align-self: flex-end;
+}
+
+.cs-gallery__item--center {
+  align-self: center;
+}
+
+/* ─── Image placeholders ─── */
+.cs-gallery__img {
+  width: 100%;
+}
+
+.cs-gallery__img--landscape {
+  aspect-ratio: 16 / 10;
+}
+
+.cs-gallery__img--portrait {
+  aspect-ratio: 3 / 4;
+}
+
+.cs-gallery__img--square {
+  aspect-ratio: 1 / 1;
+}
+
+.cs-gallery__img--wide {
+  aspect-ratio: 21 / 9;
+}
+
+/* ─── Two-column within gallery ─── */
+.cs-gallery__pair {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+}
+
+.cs-gallery__pair--equal {
+  grid-template-columns: 1fr 1fr;
+}
+
+.cs-gallery__pair--left-heavy {
+  grid-template-columns: 1.4fr 1fr;
+}
+
+.cs-gallery__pair--right-heavy {
+  grid-template-columns: 1fr 1.4fr;
+}
+
+.cs-gallery__pair-item {
+  overflow: hidden;
+}
+
+.cs-gallery__pair-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TEXT BLOCK / PULL QUOTE
+   ═══════════════════════════════════════════════════════════════════════ */
+.cs-quote {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 48px var(--page-pad);
+  text-align: center;
+  width: 100%;
+}
+
+.cs-quote__text {
+  font-size: clamp(22px, 3vw, 40px);
+  line-height: 1.2;
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.02em;
+  color: var(--dark);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.cs-quote__attrib {
+  margin-top: 20px;
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   NEXT PROJECT — full-width banner
+   ═══════════════════════════════════════════════════════════════════════ */
+.cs-next {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 400px;
+  text-decoration: none;
+  color: var(--dark);
+  border-top: 1px solid rgba(0,0,0,0.1);
+  transition: opacity var(--motion-base) var(--ease-standard);
+}
+
+.cs-next:hover {
+  opacity: 1;
+}
+
+.cs-next__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 64px var(--page-pad);
+}
+
+.cs-next__label {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+}
+
+.cs-next__title {
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 0;
+}
+
+.cs-next__cta {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.5);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cs-next__arrow {
+  font-size: 14px;
+  transition: transform var(--motion-base) var(--ease-standard);
+}
+
+.cs-next:hover .cs-next__arrow {
+  transform: translate(2px, -2px);
+}
+
+.cs-next__image {
+  overflow: hidden;
+}
+
+.cs-next__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 400px;
+}
+
+.cs-next__img-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .cs-hero__title {
+    font-size: clamp(36px, 10vw, 80px);
+  }
+
+  .cs-gallery__pair {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cs-gallery__item--full,
+  .cs-gallery__item--large,
+  .cs-gallery__item--medium,
+  .cs-gallery__item--small {
+    width: 100%;
+  }
+
+  .cs-gallery__item--left,
+  .cs-gallery__item--right {
+    align-self: stretch;
+  }
+
+  .cs-next {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-next__image {
+    order: 0;
+  }
+
+  .cs-next__img,
+  .cs-next__img-placeholder {
+    min-height: 280px;
+  }
+
+  .cs-overview__meta {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cs-hero {
+    padding: 7rem var(--page-pad) 0;
+  }
+
+  .cs-hero__top {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .cs-hero__back {
+    align-self: auto;
+  }
+}
