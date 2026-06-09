@@ -19,6 +19,12 @@
     opacity: 1;
   }
 
+  /* Info statement reveal (built in site.js) — gate to avoid a flash. */
+  html.reveal-on #info-lede,
+  html.reveal-on #info-body {
+    opacity: 0;
+  }
+
   /* Mask reveal — heading clips, inner content slides up into place. */
   html.reveal-on .reveal--mask {
     overflow: hidden;

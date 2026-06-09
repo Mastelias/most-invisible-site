@@ -97,85 +97,8 @@ import Layout from "../layouts/Layout.astro";
   <div id="site-footer"></div>
 
   <script is:inline>
-    // Slide-up line-by-line entrance for the hero statement
-    (function () {
-      const lede = document.getElementById("info-lede");
-      const body = document.getElementById("info-body");
-      if (!lede) return;
-
-      const text = lede.textContent.trim();
-      const words = text.split(/\s+/);
-      lede.innerHTML = "";
-      lede.style.display = "inline";
-
-      const spans = words.map((w) => {
-        const s = document.createElement("span");
-        s.textContent = w + " ";
-        s.style.display = "inline";
-        lede.appendChild(s);
-        return s;
-      });
-
-      function getLines() {
-        const lines = [];
-        let currentLine = [];
-        let currentTop = null;
-        spans.forEach((s) => {
-          const top = s.getBoundingClientRect().top;
-          if (currentTop === null || Math.abs(top - currentTop) < 4) {
-            currentLine.push(s);
-            if (currentTop === null) currentTop = top;
-          } else {
-            lines.push(currentLine);
-            currentLine = [s];
-            currentTop = top;
-          }
-        });
-        if (currentLine.length) lines.push(currentLine);
-        return lines;
-      }
-
-      function wrapAndAnimate() {
-        const lines = getLines();
-        lede.innerHTML = "";
-        lede.style.display = "";
-
-        lines.forEach((lineSpans, i) => {
-          const outer = document.createElement("span");
-          outer.className = "info-statement__line";
-          const inner = document.createElement("span");
-          inner.style.display = "block";
-          inner.style.transform = "translateY(110%)";
-          inner.style.opacity = "0";
-          inner.style.animation = `infoSlideUp 1.2s var(--ease-out) forwards`;
-          inner.style.animationDelay = (0.15 + i * 0.15) + "s";
-          lineSpans.forEach((s) => inner.appendChild(s));
-          outer.appendChild(inner);
-          lede.appendChild(outer);
-        });
-
-        if (body) {
-          const delay = (0.15 + lines.length * 0.15) + "s";
-          body.style.transform = "translateY(20px)";
-          body.style.opacity = "0";
-          body.style.animation = `infoSlideUp 1.2s var(--ease-out) forwards`;
-          body.style.animationDelay = delay;
-        }
-      }
-
-      wrapAndAnimate();
-
-      let resizeTimeout;
-      window.addEventListener("resize", () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-          lede.innerHTML = "";
-          lede.style.display = "inline";
-          spans.forEach((s) => lede.appendChild(s));
-          wrapAndAnimate();
-        }, 200);
-      });
-    })();
+    // NOTE: the info-lede slide-up reveal is handled by the shared line-split
+    // code in /site.js (reused with the work-lede reveal — no duplication).
 
     // Scroll-reveal: items turn black when entering the viewport center
     (function () {

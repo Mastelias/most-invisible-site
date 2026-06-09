@@ -1,3 +1,8 @@
+// ─────────────────────────────────────────────────────────────────────────
+// Site-wide client behaviour. All scroll/reveal animation lives here so there
+// is a single shared line-splitter and no duplicated logic.
+// ─────────────────────────────────────────────────────────────────────────
+
 // Live clock in Montréal time (UTC−05:00), shown in the nav.
 (function () {
   const el = document.getElementById("clock");
@@ -13,102 +18,132 @@
   setInterval(tick, 15000);
 })();
 
-// Line-by-line reveal for the work lede paragraph
+// ── Line-by-line text reveals (shared helper) ──
+// Both the work-lede (scroll-linked) and info-lede (entrance) reveals split a
+// paragraph into visual lines. That splitting lives here once and is reused.
 (function () {
-  const el = document.getElementById("work-lede");
-  if (!el) return;
+  // Wrap each word in an inline span, measure, and group spans by visual line.
+  // Leaves `el` emptied and ready for the caller to append line wrappers.
+  function groupIntoLines(el) {
+    const words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = "";
+    el.style.display = "inline";
 
-  // Split text into words, wrap each word in a span
-  const text = el.textContent.trim();
-  const words = text.split(/\s+/);
-  el.innerHTML = "";
-  el.style.display = "inline";
+    const spans = words.map((w) => {
+      const s = document.createElement("span");
+      s.textContent = w + " ";
+      s.style.display = "inline";
+      el.appendChild(s);
+      return s;
+    });
 
-  // We'll group words into visual lines after layout
-  const spans = words.map((w) => {
-    const s = document.createElement("span");
-    s.textContent = w + " ";
-    s.style.display = "inline";
-    el.appendChild(s);
-    return s;
-  });
-
-  // Group spans by visual line (same offsetTop)
-  function getLines() {
     const lines = [];
-    let currentLine = [];
-    let currentTop = null;
+    let current = [];
+    let top = null;
     spans.forEach((s) => {
-      const top = s.getBoundingClientRect().top;
-      if (currentTop === null || Math.abs(top - currentTop) < 4) {
-        currentLine.push(s);
-        if (currentTop === null) currentTop = top;
+      const t = s.getBoundingClientRect().top;
+      if (top === null || Math.abs(t - top) < 4) {
+        current.push(s);
+        if (top === null) top = t;
       } else {
-        lines.push(currentLine);
-        currentLine = [s];
-        currentTop = top;
+        lines.push(current);
+        current = [s];
+        top = t;
       }
     });
-    if (currentLine.length) lines.push(currentLine);
+    if (current.length) lines.push(current);
+
+    el.innerHTML = "";
+    el.style.display = "";
     return lines;
   }
 
-  // Wrap each visual line in a container span for opacity control
-  function wrapLines() {
-    const lines = getLines();
-    el.innerHTML = "";
-    el.style.display = "";
-    return lines.map((lineSpans) => {
-      const wrapper = document.createElement("span");
-      wrapper.style.display = "block";
-      wrapper.style.opacity = "0.25";
-      wrapper.style.transition = "opacity 0.5s ease-out";
-      wrapper.style.willChange = "opacity";
-      lineSpans.forEach((s) => wrapper.appendChild(s));
-      el.appendChild(wrapper);
-      return wrapper;
+  // Work lede — lines brighten as they pass through the middle of the viewport.
+  (function () {
+    const el = document.getElementById("work-lede");
+    if (!el) return;
+
+    function build() {
+      return groupIntoLines(el).map((lineSpans) => {
+        const wrapper = document.createElement("span");
+        wrapper.style.display = "block";
+        wrapper.style.opacity = "0.25";
+        wrapper.style.transition = "opacity 0.5s ease-out";
+        wrapper.style.willChange = "opacity";
+        lineSpans.forEach((s) => wrapper.appendChild(s));
+        el.appendChild(wrapper);
+        return wrapper;
+      });
+    }
+
+    let lineWrappers = build();
+
+    function updateOpacities() {
+      const viewH = window.innerHeight;
+      lineWrappers.forEach((wrapper) => {
+        const rect = wrapper.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const start = viewH * 0.15;
+        const end = viewH * 0.55;
+        let progress;
+        if (center < start) progress = 1 - Math.min((start - center) / (viewH * 0.3), 1);
+        else if (center > end) progress = 1 - Math.min((center - end) / (viewH * 0.3), 1);
+        else progress = 1;
+        wrapper.style.opacity = 0.25 + 0.75 * Math.max(0, Math.min(1, progress));
+      });
+    }
+
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        lineWrappers = build();
+        updateOpacities();
+      }, 200);
     });
-  }
 
-  let lineWrappers = wrapLines();
+    window.addEventListener("scroll", updateOpacities, { passive: true });
+    updateOpacities();
+  })();
 
-  // Re-wrap on resize
-  let resizeTimeout;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      // Unwrap back to raw words
-      el.innerHTML = "";
-      el.style.display = "inline";
-      spans.forEach((s) => el.appendChild(s));
-      lineWrappers = wrapLines();
-      updateOpacities();
-    }, 200);
-  });
+  // Info lede — one-shot slide-up entrance, line by line, plus the body below.
+  (function () {
+    const lede = document.getElementById("info-lede");
+    if (!lede) return;
+    const body = document.getElementById("info-body");
 
-  function updateOpacities() {
-    const viewH = window.innerHeight;
-    lineWrappers.forEach((wrapper) => {
-      const rect = wrapper.getBoundingClientRect();
-      const center = rect.top + rect.height / 2;
-      // Reveal zone: tighter — lines only fully reveal in the middle of viewport
-      const start = viewH * 0.15;
-      const end = viewH * 0.55;
-      let progress;
-      if (center < start) {
-        progress = 1 - Math.min((start - center) / (viewH * 0.3), 1);
-      } else if (center > end) {
-        progress = 1 - Math.min((center - end) / (viewH * 0.3), 1);
-      } else {
-        progress = 1;
+    function build() {
+      groupIntoLines(lede).forEach((lineSpans, i) => {
+        const outer = document.createElement("span");
+        outer.className = "info-statement__line";
+        const inner = document.createElement("span");
+        inner.style.display = "block";
+        inner.style.transform = "translateY(110%)";
+        inner.style.opacity = "0";
+        inner.style.animation = "infoSlideUp 1.2s var(--ease-out) forwards";
+        inner.style.animationDelay = (0.15 + i * 0.15) + "s";
+        lineSpans.forEach((s) => inner.appendChild(s));
+        outer.appendChild(inner);
+        lede.appendChild(outer);
+      });
+      lede.style.opacity = "1";
+
+      if (body) {
+        body.style.transform = "translateY(20px)";
+        body.style.opacity = "0";
+        body.style.animation = "infoSlideUp 1.2s var(--ease-out) forwards";
+        body.style.animationDelay = (0.15 + lede.children.length * 0.15) + "s";
       }
-      const opacity = 0.25 + 0.75 * Math.max(0, Math.min(1, progress));
-      wrapper.style.opacity = opacity;
-    });
-  }
+    }
 
-  window.addEventListener("scroll", updateOpacities, { passive: true });
-  updateOpacities();
+    build();
+
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(build, 200);
+    });
+  })();
 })();
 
 // Portfolio color inversion on scroll
@@ -178,6 +213,60 @@
 
   window.addEventListener("scroll", updateAboutTransition, { passive: true });
   updateAboutTransition();
+})();
+
+// Heading reveal — slide every h1/h2/h3 up from a mask as it enters view.
+// Light, transform-only, automatic (no manual line breaks). Pairs with
+// reveal.css and the inline `reveal-on` class set in <head>.
+(function () {
+  const root = document.documentElement;
+
+  // Respect reduced-motion: undo the pre-paint gate and show everything.
+  if (!window.matchMedia || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    root.classList.remove("reveal-on");
+    return;
+  }
+
+  try {
+    const EXCLUDE = ".hero__display, .ct-hero__display";   // own entrance/sizing logic
+    const COMPLEX = ".pw-hero__display, .portfolio__title"; // bespoke layout — don't wrap
+
+    const targets = [];
+    document.querySelectorAll("h1, h2, h3").forEach((h) => {
+      if (h.matches(EXCLUDE)) return;
+      if (h.getAttribute("data-reveal") === "off") return;
+      if (h.classList.contains("reveal")) return;
+
+      if (h.matches(COMPLEX)) {
+        h.classList.add("reveal", "reveal--simple");
+      } else {
+        const inner = document.createElement("span");
+        inner.className = "reveal__inner";
+        while (h.firstChild) inner.appendChild(h.firstChild);
+        h.appendChild(inner);
+        h.classList.add("reveal", "reveal--mask");
+      }
+      targets.push(h);
+    });
+
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach((t) => t.classList.add("is-revealed"));
+      return;
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-revealed");
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+
+    targets.forEach((t) => io.observe(t));
+  } catch (err) {
+    root.classList.remove("reveal-on"); // never leave headings hidden
+  }
 })();
 
 // Custom crosshair cursor with X/Y coordinates (desktop only)

@@ -44,7 +44,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
     <!-- Global stylesheets (shared by every page) -->
     <link rel="stylesheet" href="/colors_and_type.css?v=36" />
     <link rel="stylesheet" href="/site.css?v=45" />
-    <link rel="stylesheet" href="/reveal.css?v=1" />
+    <link rel="stylesheet" href="/reveal.css?v=2" />
     {styles.map((href) => <link rel="stylesheet" href={href} />)}
 
     <!-- Gate heading-reveal before first paint to avoid a flash of static text -->
@@ -60,8 +60,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
     <!-- Shared scripts on every page -->
     <script src="/navbar.js?v=2" is:inline></script>
     <script src="/footer.js" is:inline></script>
-    <script src="/site.js" is:inline></script>
-    <script src="/reveal.js?v=1" is:inline></script>
+    <script src="/site.js?v=46" is:inline></script>
     {pageScripts.map((src) => <script src={src} is:inline></script>)}
   </body>
 </html>
