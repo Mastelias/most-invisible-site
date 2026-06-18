@@ -10,16 +10,21 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "seed:portfolio": "node --env-file=.env scripts/seed-portfolio.mjs"
+    "seed:portfolio": "node --env-file=.env scripts/seed-portfolio.mjs",
+    "import:prep": "python3 scripts/prep-webflow.py",
+    "import:webflow": "node --env-file=.env scripts/import-webflow.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",
     "@astrojs/sitemap": "^3.7.3",
     "@portabletext/to-html": "^5.0.2",
     "@sanity/astro": "^3.4.0",
+    "@sanity/block-tools": "^3.70.0",
     "@sanity/client": "^7.22.1",
+    "@sanity/schema": "^6.1.0",
     "@sanity/vision": "^5.30.0",
     "astro": "^6.4.4",
+    "jsdom": "^29.1.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "sanity": "^5.30.0"

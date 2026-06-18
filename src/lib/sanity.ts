@@ -41,9 +41,13 @@ const POST_FIELDS = `
   "slug": slug.current,
   "date": publishedAt,
   excerpt,
+  category,
   coverStyle,
   "coverImage": coverImage.asset->url,
-  body
+  body[]{
+    ...,
+    _type == "image" => { "url": asset->url, "alt": alt }
+  }
 `;
 
 const PROJECT_FIELDS = `

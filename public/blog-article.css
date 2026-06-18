@@ -128,6 +128,94 @@
   margin: 16px 0 0;
 }
 
+.ba-body__text h3 {
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.12;
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 12px 0 0;
+}
+
+.ba-body__text h4 {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin: 8px 0 0;
+}
+
+.ba-body__text a {
+  color: var(--dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: opacity var(--motion-fast) var(--ease-standard);
+}
+.ba-body__text a:hover {
+  opacity: 0.55;
+}
+
+.ba-body__text strong {
+  font-weight: var(--fw-semibold);
+}
+.ba-body__text em {
+  font-style: italic;
+}
+
+.ba-body__text ul,
+.ba-body__text ol {
+  margin: 0;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ba-body__text ul {
+  list-style: disc;
+}
+.ba-body__text ol {
+  list-style: decimal;
+}
+.ba-body__text li {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--dark);
+}
+
+.ba-body__text blockquote {
+  margin: 8px 0;
+  padding-left: 20px;
+  border-left: 2px solid rgba(0, 0, 0, 0.2);
+  font-size: clamp(18px, 2.2vw, 24px);
+  line-height: 1.3;
+  font-weight: var(--fw-medium);
+  color: var(--dark);
+}
+
+/* Inline body images (migrated from Webflow) */
+.ba-figure {
+  margin: 8px 0;
+}
+.ba-body__text img,
+.ba-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ba-body__text figcaption,
+.ba-figure figcaption {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
    READ NEXT — 4-column grid with 3 articles
    ═══════════════════════════════════════════════════════════════════════ */

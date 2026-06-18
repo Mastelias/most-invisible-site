@@ -21,6 +21,7 @@ export interface Post {
   slug: string;
   date: string; // human-readable, e.g. "May 20, 2026"
   excerpt: string;
+  category?: string;
   coverStyle: Mesh;
   coverImage: string | null;
   /** Either Sanity Portable Text blocks or a plain-HTML string (sample data). */

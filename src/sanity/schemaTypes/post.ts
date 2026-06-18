@@ -42,6 +42,12 @@ export const post = defineType({
       validation: (r) => r.max(300),
     }),
     defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+      description: 'e.g. "design", "web-design", "business".',
+    }),
+    defineField({
       name: "coverStyle",
       title: "Cover gradient style",
       description: "Used as the cover when no cover image is uploaded.",

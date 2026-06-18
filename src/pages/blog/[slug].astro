@@ -13,7 +13,19 @@ const post = await getPost(slug!);
 if (!post) return Astro.redirect("/blog");
 
 // Body is either Sanity Portable Text (array) or sample HTML (string).
-const bodyHtml = typeof post.body === "string" ? post.body : toHTML(post.body as any);
+const bodyHtml =
+  typeof post.body === "string"
+    ? post.body
+    : toHTML(post.body as any, {
+        components: {
+          types: {
+            image: ({ value }: any) =>
+              value?.url
+                ? `<figure class="ba-figure"><img src="${value.url}?w=1600&auto=format&fit=max" alt="${(value.alt || "").replace(/"/g, "&quot;")}" loading="lazy" /></figure>`
+                : "",
+          },
+        },
+      });
 
 // Read Next — up to 3 other posts, placed in cols 1, 2, 4 (skip col 3).
 const others = (await getPosts()).filter((p) => p.slug !== post.slug).slice(0, 3);
@@ -24,7 +36,7 @@ const readNextCols = [1, 2, 4];
   title={`${post.title} — Most Invisible`}
   description={post.excerpt}
   bodyClass="page-article"
-  styles={["/blog.css?v=1", "/blog-article.css?v=2"]}
+  styles={["/blog.css?v=1", "/blog-article.css?v=3"]}
   ogImage={post.coverImage ?? "/uploads/Design Template showcase.webp"}
 >
   <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
