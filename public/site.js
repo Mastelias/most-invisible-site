@@ -146,6 +146,23 @@
   })();
 })();
 
+// Hero video — defer loading + playback until the whole page has loaded.
+(function () {
+  const v = document.querySelector("[data-hero-video]");
+  if (!v) return;
+  function start() {
+    if (v.dataset.src) {
+      v.src = v.dataset.src;
+      v.removeAttribute("data-src");
+    }
+    v.load();
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+  if (document.readyState === "complete") start();
+  else window.addEventListener("load", start, { once: true });
+})();
+
 // Portfolio color inversion on scroll
 (function () {
   const portfolio = document.querySelector(".portfolio");

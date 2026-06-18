@@ -48,7 +48,10 @@ export interface Project {
   role: string;
   industry: string;
   tags: string[];
+  /** Short summary — Selected Work list preview only. */
   description: string;
+  /** Longer write-up shown on the project's own page (Portable Text or HTML). */
+  detailDescription?: PortableBlock[] | string;
   coverStyle: Mesh;
   coverImage: string | null;
   gallery: GalleryItem[];

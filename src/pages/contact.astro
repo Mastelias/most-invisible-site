@@ -12,7 +12,7 @@ const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : undef
   description="Get in touch with Most Invisible — a design studio in Montréal. New projects, partnerships, and collaborations welcome."
   bodyClass="page-contact"
   navTheme="dark"
-  styles={["/contact.css?v=3"]}
+  styles={["/contact.css?v=4"]}
 >
   <!-- ══ HERO — full-viewport email display ═══════════════════════════ -->
   <section class="ct-hero" data-screen-label="01 Contact Hero">
@@ -237,32 +237,29 @@ const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : undef
       const line2 = rows[1];
 
       function fitText() {
-        line2.style.fontSize = "";
-        line1.style.fontSize = "";
-
         const containerW = display.clientWidth;
         if (containerW <= 0) return;
-        const targetW = containerW * 0.985;
 
-        let lo = 10, hi = 400, best = 40;
-        for (let i = 0; i < 30; i++) {
-          const mid = (lo + hi) / 2;
-          line2.style.fontSize = mid + "px";
-          const textW = line2.scrollWidth;
-          if (textW <= targetW) {
-            best = mid;
-            lo = mid;
-          } else {
-            hi = mid;
-          }
-        }
+        // Measure the actual rendered text width with a Range (works even though
+        // the row is stretched to full width by the flex column + overflow:hidden).
+        const REF = 100;
+        line2.style.fontSize = REF + "px";
+        const range = document.createRange();
+        range.selectNodeContents(line2);
+        const textW = range.getBoundingClientRect().width;
+        if (textW <= 0) return;
 
-        line2.style.fontSize = best + "px";
-        line1.style.fontSize = best + "px";
+        // Font width scales ~linearly with size; fill essentially the full width.
+        const size = REF * ((containerW * 0.99) / textW);
+        line2.style.fontSize = size + "px";
+        line1.style.fontSize = size + "px";
       }
 
       fitText();
       window.addEventListener("resize", fitText);
+      // Re-fit once webfonts load so the measurement uses the real glyph widths.
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitText);
+      window.addEventListener("load", fitText, { once: true });
     })();
   </script>
 </Layout>

@@ -58,10 +58,18 @@ export const project = defineType({
     }),
     defineField({
       name: "description",
-      title: "Description",
-      description: "Short summary shown in the list and the case-study overview.",
+      title: "Summary",
+      description: "Short one-liner shown ONLY on the Selected Work list (preview).",
       type: "text",
-      rows: 3,
+      rows: 2,
+    }),
+    defineField({
+      name: "detailDescription",
+      title: "Detailed description",
+      description:
+        "The longer write-up shown on the project's own page. Supports multiple paragraphs.",
+      type: "array",
+      of: [{ type: "block" }],
     }),
     defineField({
       name: "coverStyle",

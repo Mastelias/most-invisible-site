@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getProjects, getProject } from "../../lib/sanity";
+import { toHTML } from "@portabletext/to-html";
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -15,13 +16,22 @@ if (!project) return Astro.redirect("/work");
 const all = await getProjects();
 const idx = all.findIndex((p) => p.slug === project.slug);
 const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
+
+// The inner page shows the detailed write-up; fall back to the summary.
+const detail = project.detailDescription;
+const detailHtml =
+  detail && (typeof detail === "string" ? detail.trim() : detail.length > 0)
+    ? typeof detail === "string"
+      ? detail
+      : toHTML(detail as any)
+    : null;
 ---
 
 <Layout
   title={`${project.title} — Most Invisible`}
   description={project.description}
   bodyClass="page-case"
-  styles={["/case-study.css?v=3"]}
+  styles={["/case-study.css?v=4"]}
   ogImage={project.coverImage ?? "/uploads/Design Template showcase.webp"}
 >
   <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
@@ -67,7 +77,13 @@ const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
         </div>
       )}
     </div>
-    <p class="cs-overview__desc">{project.description}</p>
+    {
+      detailHtml ? (
+        <div class="cs-overview__desc" set:html={detailHtml} />
+      ) : (
+        <p class="cs-overview__desc">{project.description}</p>
+      )
+    }
     <div class="cs-overview__rule"></div>
   </section>
 

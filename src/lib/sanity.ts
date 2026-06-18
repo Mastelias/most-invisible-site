@@ -56,6 +56,7 @@ const PROJECT_FIELDS = `
   industry,
   tags,
   description,
+  detailDescription,
   coverStyle,
   "coverImage": coverImage.asset->url,
   featured,

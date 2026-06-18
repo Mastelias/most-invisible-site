@@ -280,6 +280,16 @@
   background: var(--dark);
 }
 
+/* ─── Desktop: alternate which side the image sits on ─── */
+@media (min-width: 901px) {
+  .pw-row--img-right .pw-row__media {
+    order: 2;
+  }
+  .pw-row--img-right .pw-row__content {
+    order: 1;
+  }
+}
+
 /* ─── Responsive ─── */
 @media (max-width: 900px) {
   .pw-row {
@@ -287,12 +297,13 @@
     gap: 24px;
   }
 
-  .pw-row--img-right .pw-row__media {
-    order: -1;
-  }
-
+  /* On mobile the text always sits above the image */
   .pw-row__content {
+    order: 0;
     padding: 0;
+  }
+  .pw-row__media {
+    order: 1;
   }
 
   .pw-hero__meta {

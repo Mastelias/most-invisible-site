@@ -19,9 +19,16 @@ const gridMeta = [
 <Layout title="Most Invisible — Design studio, Montreal" navTheme="dark">
   <!-- ══ HERO ════════════════════════════════════════════════════════ -->
   <section class="hero" id="top" data-screen-label="01 Hero">
-    <video class="hero__video" autoplay muted loop playsinline aria-hidden="true">
-      <source src="/uploads/Most Invisible Hero Footage - Video.webm" type="video/webm" />
-    </video>
+    <video
+      class="hero__video"
+      muted
+      loop
+      playsinline
+      aria-hidden="true"
+      preload="none"
+      data-hero-video
+      data-src="/uploads/Most Invisible Hero Footage - Video.webm"
+    ></video>
     <div class="hero__bg" aria-hidden="true"></div>
     <div class="hero__vignette" aria-hidden="true"></div>
 
