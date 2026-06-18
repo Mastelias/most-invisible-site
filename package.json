@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "seed:portfolio": "node --env-file=.env scripts/seed-portfolio.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",

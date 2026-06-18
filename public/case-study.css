@@ -190,9 +190,11 @@
   align-self: center;
 }
 
-/* ─── Image placeholders ─── */
+/* ─── Images & placeholders ─── */
 .cs-gallery__img {
   width: 100%;
+  height: auto;
+  display: block;
 }
 
 .cs-gallery__img--landscape {

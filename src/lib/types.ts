@@ -29,9 +29,14 @@ export interface Post {
 
 export interface GalleryItem {
   url: string | null;
+  /** Natural pixel dimensions from Sanity (used to show images at true ratio). */
+  width?: number | null;
+  height?: number | null;
+  /** Item width on the page: full / large / medium / small. */
   size: "large" | "medium" | "full" | "small";
-  orientation: "portrait" | "landscape" | "square";
   mesh?: Mesh;
+  /** Legacy — no longer used for real images (they auto-size). */
+  orientation?: "portrait" | "landscape" | "square";
 }
 
 export interface Project {

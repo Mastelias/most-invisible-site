@@ -99,34 +99,21 @@ export const project = defineType({
                   { title: "Small", value: "small" },
                 ],
               },
-              initialValue: "large",
-            },
-            {
-              name: "orientation",
-              title: "Orientation",
-              type: "string",
-              options: {
-                list: [
-                  { title: "Portrait", value: "portrait" },
-                  { title: "Landscape", value: "landscape" },
-                  { title: "Square", value: "square" },
-                ],
-              },
-              initialValue: "landscape",
+              initialValue: "full",
             },
             {
               name: "mesh",
               title: "Fallback gradient",
-              description: "Shown if no image is uploaded for this slot.",
+              description: "Shown only if no image is uploaded for this slot.",
               type: "string",
               options: { list: MESH_OPTIONS },
               initialValue: "mesh-graphite",
             },
           ],
           preview: {
-            select: { media: "image", size: "size", orientation: "orientation" },
-            prepare({ media, size, orientation }) {
-              return { title: `${size ?? ""} · ${orientation ?? ""}`, media };
+            select: { media: "image", size: "size" },
+            prepare({ media, size }) {
+              return { title: size ? `${size} width` : "Gallery image", media };
             },
           },
         },

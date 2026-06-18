@@ -60,7 +60,13 @@ const PROJECT_FIELDS = `
   "coverImage": coverImage.asset->url,
   featured,
   order,
-  "gallery": gallery[]{ size, orientation, mesh, "url": image.asset->url }
+  "gallery": gallery[]{
+    size,
+    mesh,
+    "url": image.asset->url,
+    "width": image.asset->metadata.dimensions.width,
+    "height": image.asset->metadata.dimensions.height
+  }
 `;
 
 async function safeFetch<T>(query: string, params: Record<string, unknown>, fallback: T): Promise<T> {

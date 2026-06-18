@@ -21,7 +21,7 @@ const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
   title={`${project.title} — Most Invisible`}
   description={project.description}
   bodyClass="page-case"
-  styles={["/case-study.css?v=2"]}
+  styles={["/case-study.css?v=3"]}
   ogImage={project.coverImage ?? "/uploads/Design Template showcase.webp"}
 >
   <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
@@ -75,12 +75,19 @@ const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
   {
     project.gallery && project.gallery.length > 0 && (
       <section class="cs-gallery" data-screen-label="03 Gallery">
-        {project.gallery.map((g) => (
-          <div class={`cs-gallery__item cs-gallery__item--${g.size} cs-gallery__item--center`}>
+        {project.gallery.map((g, i) => (
+          <div class={`cs-gallery__item cs-gallery__item--${g.size ?? "large"} cs-gallery__item--center`}>
             {g.url ? (
-              <div class={`cs-gallery__img cs-gallery__img--${g.orientation}`} style={`background-image:url(${g.url}); background-size:cover; background-position:center;`} />
+              <img
+                class="cs-gallery__img"
+                src={`${g.url}?w=1600&auto=format&fit=max`}
+                width={g.width ?? undefined}
+                height={g.height ?? undefined}
+                alt={`${project.title} — image ${i + 1}`}
+                loading="lazy"
+              />
             ) : (
-              <div class={`cs-gallery__img cs-gallery__img--${g.orientation} ${g.mesh ?? "mesh-graphite"}`} />
+              <div class={`cs-gallery__img cs-gallery__img--landscape ${g.mesh ?? "mesh-graphite"}`} />
             )}
           </div>
         ))}
