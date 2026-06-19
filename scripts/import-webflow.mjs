@@ -125,9 +125,21 @@ async function importPost(p) {
 const posts = JSON.parse(readFileSync("scripts/webflow-posts.json", "utf-8"));
 console.log(`Importing ${posts.length} posts into ${client.config().projectId}/${client.config().dataset}…\n`);
 
+// SKIP_EXISTING=1 → only process posts not already in Sanity (resume/extend).
+const skipExisting = process.env.SKIP_EXISTING === "1";
+const existingIds = skipExisting
+  ? new Set(await client.fetch(`*[_type=="post"]._id`))
+  : new Set();
+if (skipExisting) console.log(`Skip-existing on: ${existingIds.size} posts already present.\n`);
+
 const failures = [];
 let done = 0;
+let skipped = 0;
 for (const p of posts) {
+  if (skipExisting && existingIds.has(`post-${p.itemId}`)) {
+    skipped++;
+    continue;
+  }
   try {
     await importPost(p);
     done++;
@@ -138,5 +150,5 @@ for (const p of posts) {
   }
 }
 
-console.log(`\nDone: ${done} imported, ${failures.length} failed. Images uploaded: ${imageCache.size}.`);
+console.log(`\nDone: ${done} imported, ${skipped} skipped, ${failures.length} failed. Images uploaded: ${imageCache.size}.`);
 if (failures.length) console.log(JSON.stringify(failures, null, 2));
