@@ -1,28 +1,41 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getPosts } from "../../lib/sanity";
+import { getPostsForList } from "../../lib/sanity";
 
-const posts = await getPosts();
+const posts = await getPostsForList();
 
-// Recreate the original "rotating empty column" placement (4-col grid).
-// Empty column pattern per row (0-indexed): 3rd, 4th, 1st, 2nd.
-const emptyPattern = [2, 3, 0, 1];
-const placed: { post: (typeof posts)[number]; col: number; row: number }[] = [];
+const BATCH = 25;
+const EMPTY_PATTERN = [2, 3, 0, 1]; // 0-indexed empty column per row
+
+// Place first BATCH posts into explicit grid cells for SSR
+interface PlacedPost { post: (typeof posts)[number]; col: number; row: number }
+const placed: PlacedPost[] = [];
 let i = 0;
 let row = 0;
-while (i < posts.length) {
-  const emptyCol = emptyPattern[row % emptyPattern.length];
+while (i < Math.min(posts.length, BATCH)) {
+  const emptyCol = EMPTY_PATTERN[row % EMPTY_PATTERN.length];
   for (let col = 0; col < 4; col++) {
     if (col === emptyCol) continue;
-    if (i >= posts.length) break;
+    if (i >= Math.min(posts.length, BATCH)) break;
     placed.push({ post: posts[i], col: col + 1, row: row + 1 });
     i++;
   }
   row++;
 }
+
+// Minimal JSON for client-side infinite scroll (no body)
+const postsJson = JSON.stringify(
+  posts.map((p) => ({ title: p.title, slug: p.slug, date: p.date, coverImage: p.coverImage ?? null, coverStyle: p.coverStyle ?? "" }))
+);
 ---
 
-<Layout title="Blog — Most Invisible" description="Essays on brand identity, design, and technology from the Most Invisible studio." bodyClass="page-blog" styles={["/blog.css?v=3"]}>
+<Layout
+  title="Blog — Most Invisible"
+  description="Essays on brand identity, design, and technology from the Most Invisible studio."
+  bodyClass="page-blog"
+  styles={["/blog.css?v=4"]}
+  pageScripts={["/blog.js?v=1"]}
+>
   <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
   <section class="blog-hero" data-screen-label="01 Blog Hero">
     <h1 class="blog-hero__title">Blog Articles</h1>
@@ -46,6 +59,12 @@ while (i < posts.length) {
       ))
     }
   </section>
+
+  <!-- Sentinel: IntersectionObserver target for infinite scroll -->
+  <div id="blog-sentinel" aria-hidden="true"></div>
+
+  <!-- All posts data for client-side batching -->
+  <script type="application/json" id="__blog_posts__" set:html={postsJson}></script>
 
   <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
   <div id="site-footer"></div>

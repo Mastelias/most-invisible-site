@@ -86,7 +86,26 @@ async function safeFetch<T>(query: string, params: Record<string, unknown>, fall
   }
 }
 
+const POST_LIST_FIELDS = `
+  _id,
+  title,
+  "slug": slug.current,
+  "date": publishedAt,
+  coverStyle,
+  "coverImage": coverImage.asset->url
+`;
+
 // ─── Posts ────────────────────────────────────────────────────────────────
+
+/** Lightweight list query — no body, used by the blog index page. */
+export async function getPostsForList(): Promise<Pick<Post, "_id" | "title" | "slug" | "date" | "coverStyle" | "coverImage">[]> {
+  const posts = await safeFetch<Post[]>(
+    `*[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc){${POST_LIST_FIELDS}}`,
+    {},
+    samplePosts
+  );
+  return posts.map((p) => ({ ...p, date: formatDate(p.date) }));
+}
 
 export async function getPosts(): Promise<Post[]> {
   const posts = await safeFetch<Post[]>(
