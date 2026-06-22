@@ -1535,15 +1535,16 @@ a:hover { color: inherit; }
   .hero__recent { display: none; }
   .hero__meta {
     top: auto;
-    bottom: 22px;
+    bottom: calc(22px + 10vh);
     left: var(--page-pad);
     right: var(--page-pad);
     max-width: none;
   }
   .hero__display {
-    font-size: clamp(42px, 13vw, 100px);
+    /* Sized so the longest word fills the container width */
+    font-size: clamp(48px, 23vw, 132px);
     line-height: 0.9;
-    padding: 0 var(--page-pad) 84px;
+    padding: 0 var(--page-pad) calc(84px + 10vh);
   }
   .hero__display-row {
     flex-direction: column;

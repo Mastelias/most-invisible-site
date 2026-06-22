@@ -131,3 +131,16 @@ export async function getFeaturedProjects(): Promise<Project[]> {
   const featured = all.filter((p) => p.featured);
   return (featured.length ? featured : all).slice(0, 6);
 }
+
+/** The most recent project — newest year, then most recently added/launched. */
+export async function getLatestProject(): Promise<Project | null> {
+  const fallback =
+    [...sampleProjects].sort(
+      (a, b) => (b.year || "").localeCompare(a.year || "") || a.order - b.order
+    )[0] ?? null;
+  return safeFetch<Project | null>(
+    `*[_type == "project" && !(_id in path("drafts.**"))] | order(year desc, _createdAt desc)[0]{${PROJECT_FIELDS}}`,
+    {},
+    fallback
+  );
+}

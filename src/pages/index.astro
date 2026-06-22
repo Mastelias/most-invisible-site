@@ -1,9 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getFeaturedProjects } from "../lib/sanity";
+import { getFeaturedProjects, getLatestProject } from "../lib/sanity";
 
 // Featured projects drive the home portfolio grid.
 const featured = await getFeaturedProjects();
+// Most recent project → the hero "Recent work" card.
+const latest = await getLatestProject();
 
 // Aspect ratios, side, and mesh fallbacks cycle to preserve the original rhythm.
 const gridMeta = [
@@ -37,17 +39,28 @@ const gridMeta = [
       <p class="hero__meta-value">Brand identity + Website design + B2B + Tech Design + Graphic Design</p>
     </div>
 
-    <!-- Recent work card — top-right, under the nav -->
-    <a class="hero__recent" href="#work" aria-label="Recent work — Osmo">
-      <div class="hero__recent-media mesh-obsidian"></div>
-      <div class="hero__recent-meta">
-        <span class="hero__recent-top">Recent work</span>
-        <div class="hero__recent-row">
-          <span class="hero__recent-title">Osmo</span>
-          <span class="hero__recent-arrow" aria-hidden="true">↗</span>
-        </div>
-      </div>
-    </a>
+    <!-- Recent work card — top-right, under the nav (latest project) -->
+    {
+      latest && (
+        <a class="hero__recent" href={`/work/${latest.slug}`} aria-label={`Recent work — ${latest.title}`}>
+          {latest.coverImage ? (
+            <div
+              class="hero__recent-media"
+              style={`background-image:url(${latest.coverImage}?w=480&auto=format&fit=crop); background-size:cover; background-position:center;`}
+            />
+          ) : (
+            <div class={`hero__recent-media ${latest.coverStyle}`} />
+          )}
+          <div class="hero__recent-meta">
+            <span class="hero__recent-top">Recent work</span>
+            <div class="hero__recent-row">
+              <span class="hero__recent-title">{latest.title}</span>
+              <span class="hero__recent-arrow" aria-hidden="true">↗</span>
+            </div>
+          </div>
+        </a>
+      )
+    }
 
     <!-- Display heading — justified across 100vw at the bottom -->
     <h1 class="hero__display" style="font-weight: 500">
