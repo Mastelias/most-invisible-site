@@ -16,7 +16,7 @@ const {
   navTheme,
   styles = [],
   pageScripts = [],
-  ogImage = "/uploads/Design Template showcase.webp",
+  ogImage = "/uploads/og-image.jpg",
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
@@ -32,6 +32,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Open Graph / social -->
     <meta property="og:type" content="website" />
