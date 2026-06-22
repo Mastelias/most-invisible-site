@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    { "source": "/services", "destination": "/info", "permanent": true },
+    { "source": "/case-study", "destination": "/work", "permanent": true },
+    { "source": "/case-studies/:slug*", "destination": "/work", "permanent": true },
+    { "source": "/projects/:slug*", "destination": "/work", "permanent": true },
+    { "source": "/search", "destination": "/blog", "permanent": true }
+  ]
+}
