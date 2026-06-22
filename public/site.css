@@ -1541,14 +1541,14 @@ a:hover { color: inherit; }
     max-width: none;
   }
   .hero__display {
-    /* Sized so the longest word fills the container width */
-    font-size: clamp(48px, 23vw, 132px);
+    font-size: clamp(42px, 13vw, 100px);
     line-height: 0.9;
     padding: 0 var(--page-pad) calc(84px + 10vh);
   }
+  /* Let the words flow across the full width and wrap into fewer lines
+     (instead of stacking one word per line) */
   .hero__display-row {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   /* WORK statement fills the full width (drop the 30% left indent) */
