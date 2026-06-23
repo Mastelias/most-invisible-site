@@ -27,6 +27,6 @@ if (PUBLIC_SANITY_PROJECT_ID) {
 }
 
 export default defineConfig({
-  site: PUBLIC_SITE_URL || "https://mostinvisible.com",
+  site: PUBLIC_SITE_URL || "https://www.mostinvisible.com",
   integrations,
 });
