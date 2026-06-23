@@ -1530,12 +1530,12 @@ a:hover { color: inherit; }
   /* Tighten the gap between the last section and the footer */
   .footer { padding-top: 48px; }
 
-  /* HERO — hide the recent-work card; place the meta text under the title;
-     enlarge + lift the display title (the site's most important type) */
+  /* HERO — single variable lifts the whole bottom group off the edge */
+  .hero { --hero-floor: 5vh; }
   .hero__recent { display: none; }
   .hero__meta {
     top: auto;
-    bottom: calc(22px + 5vh);
+    bottom: calc(22px + var(--hero-floor));
     left: var(--page-pad);
     right: var(--page-pad);
     max-width: none;
@@ -1543,7 +1543,7 @@ a:hover { color: inherit; }
   .hero__display {
     font-size: clamp(42px, 13vw, 100px);
     line-height: 0.9;
-    padding: 0 var(--page-pad) calc(84px + 5vh);
+    padding: 0 var(--page-pad) calc(84px + var(--hero-floor));
   }
   /* Let the words flow across the full width and wrap into fewer lines
      (instead of stacking one word per line) */
