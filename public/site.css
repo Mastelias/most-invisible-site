@@ -505,7 +505,7 @@ a:hover { color: inherit; }
 .portfolio {
   background: var(--light);
   color: var(--dark);
-  padding: 80px 2rem 120px;
+  padding: 80px var(--page-pad) 120px;
   width: 100%;
 }
 .portfolio__title {
