@@ -8,13 +8,16 @@
   const container = document.getElementById("site-navbar");
   if (!container) return;
 
+  const n = parseInt(container.dataset.workCount || "0", 10);
+  const count = n ? "[" + String(n).padStart(2, "0") + "]" : "";
+
   container.innerHTML = `
     <header class="hero-nav" data-screen-label="Nav">
       <a class="hero-nav__mark" href="/" aria-label="Most Invisible home">
         <img src="/assets/logo-horizontal-white.svg" alt="Most Invisible" class="hero-nav__logo" style="width: 150px; height: 48px; object-fit: contain" />
       </a>
       <a class="hero-nav__link" href="/work">
-        Selected work <span class="hero-nav__count">[06]</span>
+        Selected work <span class="hero-nav__count">${count}</span>
       </a>
       <span class="hero-nav__link hero-nav__link-group">
         <a href="/info">Services</a>, <a href="/blog">blog</a>, <a href="/contact">contact</a>

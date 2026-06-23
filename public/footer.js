@@ -5,6 +5,9 @@
   const container = document.getElementById("site-footer");
   if (!container) return;
 
+  const n = parseInt(document.getElementById("site-navbar")?.dataset?.workCount || "0", 10);
+  const countLabel = n ? " (" + String(n).padStart(2, "0") + ")" : "";
+
   container.innerHTML = `
   <footer class="footer" id="contact" data-screen-label="07 Footer" data-nav-theme="light">
     <div class="footer__brand">
@@ -14,7 +17,7 @@
     <div class="footer__nav">
       <div class="footer__nav-col">
         <a href="/">Home</a>
-        <a href="/work">Selected Work (06)</a>
+        <a href="/work">Selected Work${countLabel}</a>
       </div>
       <div class="footer__nav-col">
         <a href="/info">Services</a>

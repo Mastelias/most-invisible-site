@@ -151,6 +151,19 @@ export async function getFeaturedProjects(): Promise<Project[]> {
   return (featured.length ? featured : all).slice(0, 6);
 }
 
+let _projectCount: number | null = null;
+
+/** Total published project count — cached for the build so Layout.astro only hits Sanity once. */
+export async function getProjectCount(): Promise<number> {
+  if (_projectCount !== null) return _projectCount;
+  _projectCount = await safeFetch<number>(
+    `count(*[_type == "project" && !(_id in path("drafts.**"))])`,
+    {},
+    0
+  );
+  return _projectCount!;
+}
+
 /** The most recent project — newest year, then most recently added/launched. */
 export async function getLatestProject(): Promise<Project | null> {
   const fallback =
