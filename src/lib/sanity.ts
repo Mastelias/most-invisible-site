@@ -130,7 +130,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 
 export async function getProjects(): Promise<Project[]> {
   return safeFetch<Project[]>(
-    `*[_type == "project" && !(_id in path("drafts.**"))] | order(order asc){${PROJECT_FIELDS}}`,
+    `*[_type == "project" && !(_id in path("drafts.**"))] | order(year desc, _createdAt desc){${PROJECT_FIELDS}}`,
     {},
     sampleProjects
   );
