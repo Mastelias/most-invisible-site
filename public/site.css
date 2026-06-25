@@ -1553,4 +1553,11 @@ a:hover { color: inherit; }
 
   /* WORK statement fills the full width (drop the 30% left indent) */
   .work__head { padding-left: 0; }
+
+  /* Halve the gap between the work lede and the portfolio grid */
+  .work { padding-bottom: 60px; }
+  .portfolio { padding-top: 40px; }
+
+  /* Halve the logos carousel top/bottom breathing room */
+  .logos { padding: 14px 0; }
 }
