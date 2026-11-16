@@ -14,7 +14,7 @@ const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET, PUBLIC_SITE_URL } = loa
 // The Sanity integration (and embedded Studio at /admin) only loads once a
 // project ID is configured. Until then the site still builds and runs on the
 // sample content in src/lib/sampleData.ts.
-const integrations = [react(), sitemap()];
+const integrations = [react(), sitemap({ filter: (page) => !page.includes("/admin/") })];
 if (PUBLIC_SANITY_PROJECT_ID) {
   integrations.unshift(
     sanity({
