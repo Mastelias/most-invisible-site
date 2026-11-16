@@ -12,6 +12,23 @@ const { slug } = Astro.params;
 const project = await getProject(slug!);
 if (!project) return Astro.redirect("/work");
 
+// Smart SEO: CMS fields win; auto-generate from existing content if not set.
+const metaTitle = project.seoTitle || `${project.title} — Most Invisible`;
+const metaDescription = project.seoDescription || project.description;
+
+const siteBase = (Astro.site?.href ?? Astro.url.origin).replace(/\/$/, "");
+const creativeWorkSchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": project.title,
+  "description": project.description,
+  "url": `${siteBase}/work/${project.slug}`,
+  ...(project.coverImage ? { "image": project.coverImage } : {}),
+  "creator": { "@id": "https://www.mostinvisible.com/#org" },
+  ...(project.client ? { "contributor": project.client } : {}),
+  ...(project.year ? { "dateCreated": project.year } : {})
+};
+
 // Next project = the following project by order, wrapping around.
 const all = await getProjects();
 const idx = all.findIndex((p) => p.slug === project.slug);
@@ -28,8 +45,8 @@ const detailHtml =
 ---
 
 <Layout
-  title={`${project.title} — Most Invisible`}
-  description={project.description}
+  title={metaTitle}
+  description={metaDescription}
   bodyClass="page-case"
   styles={["/case-study.css?v=4"]}
   ogImage={project.coverImage ?? "/uploads/Design Template showcase.webp"}
@@ -135,4 +152,6 @@ const detailHtml =
 
   <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
   <div id="site-footer"></div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(creativeWorkSchema)} />
 </Layout>

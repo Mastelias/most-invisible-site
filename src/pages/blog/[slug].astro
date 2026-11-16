@@ -12,6 +12,27 @@ const { slug } = Astro.params;
 const post = await getPost(slug!);
 if (!post) return Astro.redirect("/blog");
 
+// Smart SEO: CMS fields win; auto-generate from existing content if not set.
+const metaTitle = post.seoTitle || `${post.title} — Most Invisible`;
+const metaDescription = post.seoDescription || post.excerpt;
+
+const siteBase = (Astro.site?.href ?? Astro.url.origin).replace(/\/$/, "");
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.title,
+  "description": post.excerpt,
+  "datePublished": post.rawDate ?? post.date,
+  "url": `${siteBase}/blog/${post.slug}`,
+  ...(post.coverImage ? { "image": post.coverImage } : {}),
+  "author": {
+    "@type": "Person",
+    "name": "Elias Serrano",
+    "url": `${siteBase}/info`
+  },
+  "publisher": { "@id": "https://www.mostinvisible.com/#org" }
+};
+
 // Body is either Sanity Portable Text (array) or sample HTML (string).
 const bodyHtml =
   typeof post.body === "string"
@@ -33,11 +54,14 @@ const readNextCols = [1, 2, 4];
 ---
 
 <Layout
-  title={`${post.title} — Most Invisible`}
-  description={post.excerpt}
+  title={metaTitle}
+  description={metaDescription}
   bodyClass="page-article"
   styles={["/blog.css?v=1", "/blog-article.css?v=3"]}
   ogImage={post.coverImage ?? "/uploads/Design Template showcase.webp"}
+  ogType="article"
+  articlePublishedTime={post.rawDate}
+  articleAuthor="Elias Serrano"
 >
   <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
   <section class="ba-hero" data-screen-label="01 Article Hero">
@@ -91,4 +115,6 @@ const readNextCols = [1, 2, 4];
 
   <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
   <div id="site-footer"></div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostingSchema)} />
 </Layout>

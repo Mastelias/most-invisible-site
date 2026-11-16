@@ -7,6 +7,9 @@ export interface Props {
   styles?: string[];
   pageScripts?: string[];
   ogImage?: string;
+  ogType?: string;
+  articlePublishedTime?: string;
+  articleAuthor?: string;
 }
 
 import { getProjectCount } from "../lib/sanity";
@@ -19,6 +22,9 @@ const {
   styles = [],
   pageScripts = [],
   ogImage = "/uploads/og-image.jpg",
+  ogType = "website",
+  articlePublishedTime,
+  articleAuthor,
 } = Astro.props;
 
 const workCount = await getProjectCount();
@@ -31,6 +37,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -39,12 +46,50 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Open Graph / social -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Most Invisible" />
+    <meta property="og:locale" content="en_CA" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, Astro.site ?? Astro.url.origin).href} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
+    {articlePublishedTime && <meta property="article:published_time" content={articlePublishedTime} />}
+    {articleAuthor && <meta property="article:author" content={articleAuthor} />}
+
+    <!-- Site-wide structured data: Organization + WebSite -->
+    <script type="application/ld+json" is:inline>
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.mostinvisible.com/#org",
+          "name": "Most Invisible",
+          "url": "https://www.mostinvisible.com",
+          "logo": "https://www.mostinvisible.com/favicon.svg",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "contact@mostinvisible.com",
+            "contactType": "customer service"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Montréal",
+            "addressRegion": "QC",
+            "addressCountry": "CA"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.mostinvisible.com/#website",
+          "url": "https://www.mostinvisible.com",
+          "name": "Most Invisible",
+          "publisher": { "@id": "https://www.mostinvisible.com/#org" }
+        }
+      ]
+    }
+    </script>
 
     <!-- Global stylesheets (shared by every page) -->
     <link rel="stylesheet" href="/colors_and_type.css?v=36" />

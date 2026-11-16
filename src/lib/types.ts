@@ -20,12 +20,15 @@ export interface Post {
   title: string;
   slug: string;
   date: string; // human-readable, e.g. "May 20, 2026"
+  rawDate?: string; // ISO 8601 date from Sanity publishedAt, used for JSON-LD datePublished
   excerpt: string;
   category?: string;
   coverStyle: Mesh;
   coverImage: string | null;
   /** Either Sanity Portable Text blocks or a plain-HTML string (sample data). */
   body: PortableBlock[] | string;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 export interface GalleryItem {
@@ -58,4 +61,6 @@ export interface Project {
   gallery: GalleryItem[];
   featured: boolean;
   order: number;
+  seoTitle?: string;
+  seoDescription?: string;
 }

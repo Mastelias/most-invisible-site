@@ -96,6 +96,74 @@ import Layout from "../layouts/Layout.astro";
   <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
   <div id="site-footer"></div>
 
+  <script type="application/ld+json" is:inline>
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.mostinvisible.com/#elias",
+        "name": "Elias Serrano",
+        "jobTitle": "Founder, Most Invisible",
+        "worksFor": { "@id": "https://www.mostinvisible.com/#org" },
+        "url": "https://www.mostinvisible.com/info",
+        "image": "https://www.mostinvisible.com/uploads/638ace952a2fb8a6aaeff587_Elias-3-p-1600.jpg",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Montréal",
+          "addressRegion": "QC",
+          "addressCountry": "CA"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is brand strategy?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We build a strategic plan to help you establish a consistent message across all your channels with your own tagline, campaign headline, and a brand voice." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is art direction?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We guide the visual tone and creative vision of your project, ensuring every element aligns with your brand's identity and communicates with clarity and impact." }
+          },
+          {
+            "@type": "Question",
+            "name": "What does website design & development include?",
+            "acceptedAnswer": { "@type": "Answer", "text": "This is the synthesis of all the creative process in order to achieve in-depth insights, visual impact, and ultimately your conversions. We create and develop your website as the digital home of your brand." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is SEO/AEO optimization?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We modernize outdated SEO and AEO practices to boost website visibility and performance in today's search and AI landscapes. This allows us to design a clear structure to your website that the eye cannot see." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is AI tech design?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We enable AI to build custom apps, software, and tech systems with design expertise. Not only thinking of features and functionality, but also on how the user will interact with the technology." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is logo identity design?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Through a collaborative and effective process, we design and develop your brand's logo compositions and its general visual identity." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is UI/UX design?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We deliver a complete and exceptional user experience and intuitive design for you and your users through rigorous research, trials, and evaluation of users' needs and requirements." }
+          },
+          {
+            "@type": "Question",
+            "name": "What graphic design services do you offer?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We help you extend your visibility in the digital space by crafting marketing materials, banners, social media graphics, and more, that allows you to build a strong and consistent online presence and brand recognition." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <script is:inline>
     // NOTE: the info-lede slide-up reveal is handled by the shared line-split
     // code in /site.js (reused with the work-lede reveal — no duplication).

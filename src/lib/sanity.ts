@@ -40,10 +40,13 @@ const POST_FIELDS = `
   title,
   "slug": slug.current,
   "date": publishedAt,
+  "rawDate": publishedAt,
   excerpt,
   category,
   coverStyle,
   "coverImage": coverImage.asset->url,
+  "seoTitle": seo.metaTitle,
+  "seoDescription": seo.metaDescription,
   body[]{
     ...,
     _type == "image" => { "url": asset->url, "alt": alt }
@@ -63,6 +66,8 @@ const PROJECT_FIELDS = `
   detailDescription,
   coverStyle,
   "coverImage": coverImage.asset->url,
+  "seoTitle": seo.metaTitle,
+  "seoDescription": seo.metaDescription,
   featured,
   order,
   "gallery": gallery[]{
