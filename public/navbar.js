@@ -22,7 +22,7 @@
       <span class="hero-nav__link hero-nav__link-group">
         <a href="/info">Services</a>, <a href="/blog">blog</a>, <a href="/contact">contact</a>
       </span>
-      <a class="hero-nav__link hero-nav__link--right" href="mailto:contact@mostinvisible.com">
+      <a class="hero-nav__link hero-nav__link--right" href="mailto:contact@mostinvisible.com" target="_blank" rel="noopener noreferrer">
         contact@mostinvisible.com
       </a>
       <button class="hero-nav__burger" aria-label="Open menu" aria-expanded="false">
