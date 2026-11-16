@@ -15,7 +15,8 @@
 
   /* Headings with their own entrance / sizing logic are never gated. */
   html.reveal-on .hero__display,
-  html.reveal-on .ct-hero__display {
+  html.reveal-on .ct-hero__display,
+  html.reveal-on .blog-card__title {
     opacity: 1;
   }
 
