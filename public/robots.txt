@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://mostinvisible.com/sitemap-index.xml
+Sitemap: https://www.mostinvisible.com/sitemap-index.xml
