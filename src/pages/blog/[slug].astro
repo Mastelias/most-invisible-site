@@ -42,14 +42,51 @@ const bodyHtml =
           types: {
             image: ({ value }: any) =>
               value?.url
-                ? `<figure class="ba-figure"><img src="${value.url}?w=1600&auto=format&fit=max" alt="${(value.alt || "").replace(/"/g, "&quot;")}" loading="lazy" /></figure>`
+                ? `<figure class="ba-figure"><img src="${value.url}?w=1600&auto=format&fit=max" alt="${(value.alt || post.title).replace(/"/g, "&quot;")}" loading="lazy" /></figure>`
                 : "",
           },
         },
       });
 
-// Read Next — up to 3 other posts, placed in cols 1, 2, 4 (skip col 3).
-const others = (await getPosts()).filter((p) => p.slug !== post.slug).slice(0, 3);
+// ─── Table of contents — built from H2s in the rendered body ─────────────────
+function slugifyId(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+const tocEntries: { id: string; text: string }[] = [];
+const bodyHtmlWithAnchors = bodyHtml.replace(/<h2>([^<]*)<\/h2>/gi, (_, text) => {
+  const id = slugifyId(text);
+  tocEntries.push({ id, text });
+  return `<h2 id="${id}">${text}</h2>`;
+});
+
+// ─── Read Next — keyword scoring from title + excerpt ────────────────────────
+const STOP = new Set([
+  "a","an","the","and","or","but","in","on","at","to","for","of","with","by",
+  "from","up","about","into","is","are","was","were","be","been","have","has",
+  "had","do","does","did","will","would","could","should","may","might","it",
+  "its","this","that","these","those","i","you","he","she","we","they","what",
+  "which","who","how","when","where","why","all","both","each","more","most",
+  "other","some","no","not","only","so","than","too","very","just","your",
+  "our","their","my","his","her","if","can","get","make","use","your"
+]);
+function tokenize(t: string): Set<string> {
+  return new Set(t.toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/).filter(w => w.length > 2 && !STOP.has(w)));
+}
+const titleToks = tokenize(post.title);
+const excerptToks = tokenize(post.excerpt || "");
+const others = (await getPosts())
+  .filter(p => p.slug !== post.slug)
+  .map(p => {
+    const pt = tokenize(p.title), pe = tokenize(p.excerpt || "");
+    let score = 0;
+    for (const t of titleToks)   { if (pt.has(t)) score += 3; else if (pe.has(t)) score += 1; }
+    for (const t of excerptToks) { if (pt.has(t)) score += 2; else if (pe.has(t)) score += 1; }
+    return { p, score };
+  })
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map(({ p }) => p);
+
 const readNextCols = [1, 2, 4];
 ---
 
@@ -57,7 +94,7 @@ const readNextCols = [1, 2, 4];
   title={metaTitle}
   description={metaDescription}
   bodyClass="page-article"
-  styles={["/blog.css?v=1", "/blog-article.css?v=3"]}
+  styles={["/blog.css?v=1", "/blog-article.css?v=4"]}
   ogImage={post.coverImage ?? "/uploads/Design Template showcase.webp"}
   ogType="article"
   articlePublishedTime={post.rawDate}
@@ -86,7 +123,23 @@ const readNextCols = [1, 2, 4];
       <div class={`ba-body__cover-placeholder ${post.coverStyle}`}></div>
     )}
 
-    <div class="ba-body__text" set:html={bodyHtml} />
+    {tocEntries.length >= 3 && (
+      <nav class="ba-toc" aria-label="Table of contents">
+        <span class="ba-toc__label">Contents</span>
+        <ol class="ba-toc__list">
+          {tocEntries.map((e, i) => (
+            <li class="ba-toc__item">
+              <a class="ba-toc__link" href={`#${e.id}`}>
+                <span class="ba-toc__num">{String(i + 1).padStart(2, "0")}</span>
+                <span class="ba-toc__text">{e.text}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    <div class="ba-body__text" set:html={bodyHtmlWithAnchors} />
   </section>
 
   <!-- ══ READ NEXT ═════════════════════════════════════════════════════ -->
