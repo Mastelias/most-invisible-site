@@ -139,6 +139,8 @@
   font-size: 13px;
   line-height: 1.4;
   color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   transition: opacity var(--motion-fast, 0.15s) ease;
 }
 .ba-toc__link:hover { opacity: 0.5; }
